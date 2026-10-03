@@ -63,26 +63,26 @@ export const SIGN_MODALITIES: Record<string, keyof import("./types").ModalityBal
 };
 
 export const SIGN_COLORS: Record<string, string> = {
-  aries: "#c45c3e",
-  taurus: "#6b7a4a",
-  gemini: "#8a7a4d",
-  cancer: "#6a7d8c",
-  leo: "#c4a05a",
-  virgo: "#7a6b52",
-  libra: "#9a6d78",
-  scorpio: "#5c3d4a",
-  sagittarius: "#b07048",
-  capricorn: "#4d5a4a",
-  aquarius: "#4d6270",
-  pisces: "#6a5c78",
+  aries: "#f0a0b8",
+  taurus: "#c9b4e8",
+  gemini: "#e8d4a8",
+  cancer: "#b8d4f0",
+  leo: "#f0c878",
+  virgo: "#d4c4e8",
+  libra: "#f0b8d0",
+  scorpio: "#c090c8",
+  sagittarius: "#e8b898",
+  capricorn: "#a8c0d8",
+  aquarius: "#b8a8e8",
+  pisces: "#d8b8e8",
 };
 
 export const ASPECT_COLORS: Record<string, string> = {
-  conjunction: "#c4a05a",
-  opposition: "#a85a62",
-  square: "#b07048",
-  trine: "#6b7a4a",
-  sextile: "#5a7388",
+  conjunction: "#f0c878",
+  opposition: "#f0a0b8",
+  square: "#e8b898",
+  trine: "#c9b4e8",
+  sextile: "#b8d4f0",
 };
 
 export const BODY_ORDER = [

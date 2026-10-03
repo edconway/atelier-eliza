@@ -8,6 +8,7 @@ A studio site for **Eliza**, an astrologer in Bath: draw an interactive natal ch
 - **Book a sitting** with Eliza from the header, a chart, or `/book`.
 - **Members atelier** — saved charts (yourself, partner, child, …), session films, and sitting requests.
 - **Journal + studio list** — essays and a newsletter signup (stored locally until a real mailer is connected).
+- **AAF interchange** — paste Astro.com exports; download the library for other software.
 
 ## How charts are calculated
 
@@ -19,7 +20,24 @@ This is a **consultation-grade natal service**, not a toy wheel:
 - Place search uses [Open-Meteo geocoding](https://open-meteo.com/en/docs/geocoding-api) (no API key).
 - Unknown birth times use a **noon chart** and are labelled as estimates for rising/houses.
 
-Each drawn chart shows the timezone, local time, UTC, and coordinates so you can check the input. Professional desktop software (Solar Fire, Janus) uses Swiss Ephemeris files for slightly tighter outer-planet precision; that can be swapped in later on the server. The larger sources of error in real life remain **wrong birth time** and **wrong place**, which the wizard is designed to make obvious.
+Each drawn chart shows the timezone, local time, UTC, and coordinates so you can check the input. Professional desktop software (Solar Fire, Janus, **astro.com**) uses **Swiss Ephemeris**. That library can be licensed from Astrodienst (AGPL, or a paid professional license for a closed-source studio site) if Eliza wants their exact engine. The larger sources of error in real life remain **wrong birth time** and **wrong place**.
+
+## This is not astro.com — and there is no API to plug into it
+
+[Astrodienst](https://www.astro.com) is a decades-deep research desk: natal, transits, progressions, solar/lunar returns, synastry, composites, dozens of house systems, asteroids, PDFs, AstroClick. Rebuilding that inside a consultation studio would be a second product, not a prettier natal wheel.
+
+They also **do not offer a public REST API** for two-way chart sync. What they publish is:
+
+1. The **Swiss Ephemeris** C library (calculation engine), not a hosted chart API.
+2. Manual **AAF** export from *My Astro* (the `aaf` button appears only if a member has more than ten saved charts).
+
+The atelier therefore:
+
+- Draws consultation natal wheels here (interactive, family library, sittings).
+- **Imports and exports AAF** in the members library so people can carry birth data to and from astro.com and other software.
+- Links out to astro.com for research they already love.
+
+Do not scrape their chart CGI. AAF + honest linking is the durable bridge.
 
 ## Run locally
 

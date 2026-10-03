@@ -99,12 +99,28 @@ export function NatalWheel({
         className="w-full drop-shadow-sm"
       >
         <defs>
-          <radialGradient id="wheel-paper" cx="50%" cy="42%">
-            <stop offset="0%" stopColor="#fbf6ea" />
-            <stop offset="100%" stopColor="#efe4cf" />
+          <radialGradient id="wheel-night" cx="50%" cy="42%">
+            <stop offset="0%" stopColor="#3a2048" />
+            <stop offset="70%" stopColor="#1c1028" />
+            <stop offset="100%" stopColor="#120814" />
           </radialGradient>
+          <filter id="soft-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
-        <circle cx={CX} cy={CY} r={312} fill="url(#wheel-paper)" />
+        <circle cx={CX} cy={CY} r={312} fill="url(#wheel-night)" />
+        <circle
+          cx={CX}
+          cy={CY}
+          r={311}
+          fill="none"
+          stroke="#f0c0d8"
+          strokeOpacity={0.35}
+        />
         {SIGNS.map((sign, index) => {
           const h1 = (((rising?.longitude ?? 0) - index * 30) + 360) % 360;
           const h2 = (h1 - 30 + 360) % 360;
@@ -115,9 +131,9 @@ export function NatalWheel({
               <path
                 d={sector(h1, h2, 308, 258)}
                 fill={SIGN_COLORS[sign]}
-                fillOpacity={0.18}
-                stroke="#2a2430"
-                strokeOpacity={0.18}
+                fillOpacity={0.32}
+                stroke="#f7d0e4"
+                strokeOpacity={0.28}
               />
               <text
                 x={label.x}
@@ -125,7 +141,7 @@ export function NatalWheel({
                 textAnchor="middle"
                 dominantBaseline="middle"
                 className="font-glyph text-[18px]"
-                fill="#2a2430"
+                fill="#f7e8f4"
               >
                 {SIGN_GLYPHS[sign]}
               </text>
@@ -143,8 +159,8 @@ export function NatalWheel({
                 y1={inner.y}
                 x2={outer.x}
                 y2={outer.y}
-                stroke="#2a2430"
-                strokeOpacity={house.number === 1 || house.number === 10 ? 0.55 : 0.18}
+                stroke="#f4d4e8"
+                strokeOpacity={house.number === 1 || house.number === 10 ? 0.7 : 0.22}
                 strokeWidth={house.number === 1 || house.number === 10 ? 1.6 : 1}
               />
               <text
@@ -152,7 +168,7 @@ export function NatalWheel({
                 y={num.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fill="#6a5c4d"
+                fill="#e8c8dc"
                 className="text-[11px]"
               >
                 {house.number}
@@ -164,15 +180,15 @@ export function NatalWheel({
           cx={CX}
           cy={CY}
           r={78}
-          fill="#f7f0e4"
-          stroke="#c4a05a"
+          fill="#2a1838"
+          stroke="#f0c0d8"
           strokeWidth={1.2}
         />
         <text
           x={CX}
           y={CY - 8}
           textAnchor="middle"
-          className="font-heading text-[15px] fill-ink"
+          className="font-heading text-[15px] fill-[#f7e8f4]"
         >
           {chart.input.name.split(" ")[0]}
         </text>
@@ -180,7 +196,7 @@ export function NatalWheel({
           x={CX}
           y={CY + 12}
           textAnchor="middle"
-          className="text-[10px] fill-muted-foreground"
+          className="text-[10px] fill-[#d8b8d0]"
         >
           {chart.unknownTime ? "noon chart" : "natal"}
         </text>
@@ -220,7 +236,7 @@ export function NatalWheel({
         ))}
       </svg>
       {activeBody ? (
-        <div className="pointer-events-none absolute inset-x-4 bottom-3 mx-auto max-w-sm rounded-xl bg-ink/92 px-4 py-3 text-cream shadow-lg sm:inset-x-auto sm:right-3 sm:bottom-6 sm:left-auto">
+        <div className="pointer-events-none absolute inset-x-4 bottom-3 mx-auto max-w-sm rounded-2xl border border-rose/30 bg-[#1a0f24]/90 px-4 py-3 text-cream shadow-[0_0_40px_rgba(240,160,184,0.2)] sm:inset-x-auto sm:right-3 sm:bottom-6 sm:left-auto">
           <p className="font-heading text-lg">
             <span className="font-glyph mr-2">{PLANET_GLYPHS[activeBody.id]}</span>
             {activeBody.name}
@@ -286,9 +302,10 @@ function PlanetMark({
         cx={point.x}
         cy={point.y}
         r={active ? 16 : 13}
-        fill={active ? "#2a2430" : "#fbf6ea"}
-        stroke="#c4a05a"
+        fill={active ? "#f0c0d8" : "#241428"}
+        stroke="#f0c0d8"
         strokeWidth={active ? 1.8 : 1.1}
+        filter={active ? "url(#soft-glow)" : undefined}
       />
       <text
         x={point.x}
@@ -296,7 +313,7 @@ function PlanetMark({
         textAnchor="middle"
         dominantBaseline="middle"
         className="font-glyph text-[14px]"
-        fill={active ? "#fbf6ea" : "#2a2430"}
+        fill={active ? "#1a0f24" : "#f7e8f4"}
       >
         {PLANET_GLYPHS[body.id] ?? body.name[0]}
       </text>

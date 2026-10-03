@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useAtelier } from "@/lib/atelier-store";
 import { Button } from "@/components/ui/button";
 import { titleCase } from "@/lib/glyphs";
+import { AafInterchange } from "@/components/chart/aaf-interchange";
 
 export default function MembersChartsPage() {
   const router = useRouter();
@@ -114,6 +115,7 @@ export default function MembersChartsPage() {
           ))}
         </ul>
       )}
+      <AafInterchange />
     </div>
   );
 }

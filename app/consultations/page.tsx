@@ -36,7 +36,7 @@ const sittings = [
 export default function ConsultationsPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
-      <p className="text-xs uppercase tracking-[0.28em] text-gold-ink">
+        <p className="text-xs uppercase tracking-[0.28em] text-rose">
         The hour
       </p>
       <h1 className="mt-4 font-heading text-5xl tracking-tight">Sittings</h1>
@@ -52,7 +52,7 @@ export default function ConsultationsPage() {
           >
             <div className="flex items-baseline justify-between gap-3">
               <h2 className="font-heading text-2xl">{sitting.title}</h2>
-              <span className="text-sm text-gold-ink">{sitting.price}</span>
+              <span className="text-sm text-rose">{sitting.price}</span>
             </div>
             <p className="mt-1 text-xs uppercase tracking-[0.16em] text-muted-foreground">
               {sitting.time}
@@ -68,7 +68,7 @@ export default function ConsultationsPage() {
       </div>
       <p className="mt-12 text-sm text-muted-foreground">
         Prefer to meet the sky first?{" "}
-        <Link href="/chart/new" className="text-gold-ink underline">
+        <Link href="/chart/new" className="text-rose underline">
           Draw a natal chart
         </Link>{" "}
         and bring it to the hour.

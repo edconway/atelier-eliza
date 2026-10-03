@@ -118,7 +118,7 @@ export function ChartWizard() {
             key={label}
             className={cn(
               "flex-1 border-b-2 pb-2",
-              index <= step ? "border-gold text-foreground" : "border-border",
+              index <= step ? "border-rose text-rose" : "border-white/15",
             )}
           >
             {label}
@@ -128,7 +128,7 @@ export function ChartWizard() {
 
       {step === 0 && (
         <section className="space-y-6">
-          <h1 className="font-heading text-4xl tracking-tight">
+          <h1 className="font-heading text-5xl tracking-tight italic">
             Who is this chart for?
           </h1>
           <p className="text-muted-foreground">
@@ -155,8 +155,8 @@ export function ChartWizard() {
                 className={cn(
                   "rounded-full border px-4 py-2 text-sm transition",
                   relationship === item.value
-                    ? "border-ink bg-ink text-cream"
-                    : "border-border bg-card hover:border-gold",
+                    ? "border-rose bg-rose text-primary-foreground"
+                    : "border-white/15 bg-white/5 hover:border-rose/60",
                 )}
               >
                 {item.label}
@@ -175,7 +175,7 @@ export function ChartWizard() {
             Date first. Time if you have it — even a parent’s “around four”
             is worth writing down later with Eliza.
           </p>
-          <div className="overflow-hidden rounded-2xl border border-border bg-card p-3">
+          <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-3">
             <Calendar
               mode="single"
               selected={date}
@@ -219,7 +219,7 @@ export function ChartWizard() {
             </div>
           )}
           {unknownTime && (
-            <p className="rounded-xl bg-gold/15 px-4 py-3 text-sm">
+            <p className="rounded-xl bg-rose/15 px-4 py-3 text-sm">
               We’ll draw a noon chart. The Sun and planets still speak; the
               rising sign and houses are estimates until a time is found.
             </p>

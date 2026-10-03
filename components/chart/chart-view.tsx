@@ -34,7 +34,7 @@ export function ChartView({ chart }: { chart: NatalChart }) {
           <Badge variant="secondary">Rising {chart.summary.rising}</Badge>
         </div>
         {chart.unknownTime && (
-          <p className="mt-4 rounded-xl bg-gold/15 px-4 py-3 text-sm">
+          <p className="mt-4 rounded-xl bg-rose/15 px-4 py-3 text-sm">
             Birth time unknown — houses and rising are a noon estimate.
           </p>
         )}
@@ -121,16 +121,17 @@ export function ChartView({ chart }: { chart: NatalChart }) {
           </p>
         </div>
         <div className="flex flex-col gap-2">
-          <Button onClick={() => setBookingOpen(true)}>
+          <Button className="rounded-full" onClick={() => setBookingOpen(true)}>
             Sit with Eliza over this chart
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" className="rounded-full" asChild>
             <Link href="/members">
               {member ? "Open in your atelier" : "Save in your atelier"}
             </Link>
           </Button>
           <Button
             variant="ghost"
+            className="rounded-full"
             onClick={() => {
               saveChart(chart);
             }}
@@ -161,9 +162,9 @@ function BalanceMeter({
               <span>{label}</span>
               <span className="text-muted-foreground">{value}</span>
             </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
+            <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-gold"
+                className="h-full rounded-full bg-rose"
                 style={{ width: `${(value / max) * 100}%` }}
               />
             </div>

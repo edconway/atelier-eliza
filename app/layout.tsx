@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist, Geist_Mono, Noto_Sans_Symbols_2 } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  Geist_Mono,
+  Noto_Sans_Symbols_2,
+  Outfit,
+} from "next/font/google";
 import { AppShell } from "@/components/site/app-shell";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
@@ -13,9 +18,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 const symbols = Noto_Sans_Symbols_2({
@@ -30,14 +37,14 @@ export const metadata: Metadata = {
     template: "%s · Atelier Eliza",
   },
   description:
-    "A studio in Bath where Eliza draws natal charts and sits with you over them. Keep a family library, book an hour, watch the films of sittings past.",
+    "A luminous studio for natal charts, sittings with Eliza, a family library of wheels, and letters with the Moon.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${symbols.variable} h-full antialiased`}
+      className={`${outfit.variable} ${cormorant.variable} ${geistMono.variable} ${symbols.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <AppShell>{children}</AppShell>
