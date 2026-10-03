@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { NatalWheel } from "@/components/chart/natal-wheel";
+import { ViewOnAstroCom } from "@/components/chart/view-on-astro-com";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAtelier } from "@/lib/atelier-store";
@@ -130,6 +131,7 @@ export function ChartView({ chart }: { chart: NatalChart }) {
               {member ? "Open in your atelier" : "Save in your atelier"}
             </Link>
           </Button>
+          <ViewOnAstroCom chart={chart} />
           <Button
             variant="ghost"
             className="rounded-full"

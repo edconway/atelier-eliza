@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { titleCase } from "@/lib/glyphs";
 import { AafInterchange } from "@/components/chart/aaf-interchange";
+import { ViewOnAstroCom } from "@/components/chart/view-on-astro-com";
 
 export default function MembersChartsPage() {
   const router = useRouter();
@@ -125,10 +126,17 @@ export default function MembersChartsPage() {
                   </>
                 )}
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Button size="sm" asChild>
                   <Link href={`/chart/${chart.id}`}>Open</Link>
                 </Button>
+                <ViewOnAstroCom
+                  chart={chart}
+                  size="sm"
+                  variant="ghost"
+                  label="Astro.com"
+                  className="w-auto"
+                />
                 <Button
                   size="sm"
                   variant="ghost"
