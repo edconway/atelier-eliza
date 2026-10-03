@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { ExternalLink } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { ASTRO_COM_ADE_URL, astroComFormFields } from "@/lib/astro-com";
 import type { NatalChart } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -19,28 +20,44 @@ export function ViewOnAstroCom({
   className?: string;
   label?: string;
 }) {
-  const fields = astroComFormFields(chart.input);
+  const [pending, setPending] = useState(false);
+
+  async function openOnAstroCom() {
+    setPending(true);
+    try {
+      const response = await fetch("/api/astro-com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(chart.input),
+      });
+      const data = (await response.json()) as { url?: string; error?: string };
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || "Astro.com did not open this chart.");
+      }
+      window.open(data.url, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Astro.com could not open this chart.",
+      );
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
-    <form
-      action={ASTRO_COM_ADE_URL}
-      method="post"
-      target="_blank"
-      className={cn("w-full", className)}
+    <Button
+      type="button"
+      variant={variant}
+      size={size}
+      className={cn("rounded-full", size === "default" && "w-full", className)}
+      onClick={openOnAstroCom}
+      disabled={pending}
+      title="Opens this birth data on Astro.com. They may ask you to register (free) before showing the wheel."
     >
-      {Object.entries(fields).map(([name, value]) => (
-        <input key={name} type="hidden" name={name} value={value} />
-      ))}
-      <Button
-        type="submit"
-        variant={variant}
-        size={size}
-        className={cn("rounded-full", size === "default" && "w-full")}
-        title="Opens Astro.com with this birth data so you can confirm the place and see their wheel"
-      >
-        {label}
-        <ExternalLink data-icon="inline-end" />
-      </Button>
-    </form>
+      {pending ? "Opening Astro.com…" : label}
+      <ExternalLink data-icon="inline-end" />
+    </Button>
   );
 }
