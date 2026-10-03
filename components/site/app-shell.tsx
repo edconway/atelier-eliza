@@ -11,7 +11,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <AtelierProvider>
       <TooltipProvider delayDuration={200}>
-        <div className="flex min-h-full flex-col">
+        <div className="flex min-h-screen flex-col">
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
