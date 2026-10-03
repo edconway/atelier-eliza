@@ -36,6 +36,8 @@ export function ChartWizard() {
   const [query, setQuery] = useState("");
   const [places, setPlaces] = useState<Place[]>([]);
   const [place, setPlace] = useState<Place | null>(null);
+  const [manualLat, setManualLat] = useState("");
+  const [manualLng, setManualLng] = useState("");
   const [searching, setSearching] = useState(false);
   const [pending, setPending] = useState(false);
 
@@ -276,14 +278,66 @@ export function ChartWizard() {
             </ul>
           )}
           {place && (
-            <p className="rounded-xl border border-gold/40 bg-card px-4 py-3 text-sm">
+            <p className="rounded-xl border border-rose/40 bg-white/5 px-4 py-3 text-sm">
               {place.name}
               <br />
-              {place.latitude.toFixed(4)}° N/S · {place.longitude.toFixed(4)}°
-              E/W
+              {place.latitude.toFixed(4)}°, {place.longitude.toFixed(4)}°
               {place.timezone ? ` · ${place.timezone}` : ""}
             </p>
           )}
+          <details className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <summary className="cursor-pointer text-sm text-lilac">
+              Paste coordinates instead
+            </summary>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="lat">Latitude</Label>
+                <Input
+                  id="lat"
+                  inputMode="decimal"
+                  placeholder="51.381"
+                  value={manualLat}
+                  onChange={(event) => setManualLat(event.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="lng">Longitude</Label>
+                <Input
+                  id="lng"
+                  inputMode="decimal"
+                  placeholder="-2.359"
+                  value={manualLng}
+                  onChange={(event) => setManualLng(event.target.value)}
+                />
+              </div>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-3 rounded-full"
+              onClick={() => {
+                const latitude = Number(manualLat);
+                const longitude = Number(manualLng);
+                if (
+                  !Number.isFinite(latitude) ||
+                  !Number.isFinite(longitude) ||
+                  latitude < -90 ||
+                  latitude > 90 ||
+                  longitude < -180 ||
+                  longitude > 180
+                ) {
+                  toast.error("Latitude and longitude need to be real Earth coordinates.");
+                  return;
+                }
+                const name = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+                setPlace({ name, latitude, longitude });
+                setQuery(name);
+                setPlaces([]);
+              }}
+            >
+              Use these coordinates
+            </Button>
+          </details>
         </section>
       )}
 
@@ -292,7 +346,7 @@ export function ChartWizard() {
           <h1 className="font-heading text-4xl tracking-tight">
             Does this read true?
           </h1>
-          <p className="font-heading text-2xl leading-snug text-ink">
+          <p className="font-heading text-2xl leading-snug text-foreground">
             {formatBirthSentence(input)}
           </p>
           <p className="text-sm text-muted-foreground">

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 import { NatalWheel } from "@/components/chart/natal-wheel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -134,9 +135,17 @@ export function ChartView({ chart }: { chart: NatalChart }) {
             className="rounded-full"
             onClick={() => {
               saveChart(chart);
+              toast.success("This wheel is in your atelier.");
             }}
           >
             Keep this wheel
+          </Button>
+          <Button
+            variant="ghost"
+            className="rounded-full"
+            onClick={() => window.print()}
+          >
+            Print
           </Button>
         </div>
       </aside>

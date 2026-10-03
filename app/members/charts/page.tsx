@@ -6,13 +6,16 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useAtelier } from "@/lib/atelier-store";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { titleCase } from "@/lib/glyphs";
 import { AafInterchange } from "@/components/chart/aaf-interchange";
 
 export default function MembersChartsPage() {
   const router = useRouter();
-  const { member, charts, ready, deleteChart, saveChart } = useAtelier();
+  const { member, charts, ready, deleteChart, saveChart, renameChart } = useAtelier();
   const [samplePending, setSamplePending] = useState(false);
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
 
   async function drawSample() {
     setSamplePending(true);
@@ -93,15 +96,48 @@ export default function MembersChartsPage() {
               className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
-                <p className="font-heading text-xl">{chart.input.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {titleCase(chart.input.relationship)} · Sun {chart.summary.sun} ·
-                  Moon {chart.summary.moon}
-                </p>
+                {renamingId === chart.id ? (
+                  <form
+                    className="flex gap-2"
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      if (renameValue.trim()) renameChart(chart.id, renameValue.trim());
+                      setRenamingId(null);
+                    }}
+                  >
+                    <Input
+                      value={renameValue}
+                      onChange={(event) => setRenameValue(event.target.value)}
+                      autoFocus
+                      className="h-8"
+                    />
+                    <Button size="sm" type="submit">
+                      Save
+                    </Button>
+                  </form>
+                ) : (
+                  <>
+                    <p className="font-heading text-xl">{chart.input.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {titleCase(chart.input.relationship)} · Sun {chart.summary.sun} ·
+                      Moon {chart.summary.moon}
+                    </p>
+                  </>
+                )}
               </div>
               <div className="flex gap-2">
                 <Button size="sm" asChild>
                   <Link href={`/chart/${chart.id}`}>Open</Link>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setRenamingId(chart.id);
+                    setRenameValue(chart.input.name);
+                  }}
+                >
+                  Rename
                 </Button>
                 <Button
                   size="sm"
