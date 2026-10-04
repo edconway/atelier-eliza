@@ -25,7 +25,7 @@ export default function SignInPage() {
       <p className="text-xs uppercase tracking-[0.28em] text-gold-ink">
         Members
       </p>
-      <h1 className="mt-4 font-heading text-4xl">Your atelier</h1>
+      <h1 className="mt-4 font-heading text-4xl">Your library</h1>
       <p className="mt-3 text-sm text-muted-foreground">
         Charts and films live on this device for now. When Eliza hosts the
         site, this becomes a true account. A name and email are enough to
@@ -52,7 +52,7 @@ export default function SignInPage() {
           />
         </div>
         <Button type="submit" className="w-full">
-          Enter the atelier
+          Enter the library
         </Button>
       </form>
       <button
@@ -63,7 +63,7 @@ export default function SignInPage() {
           router.push("/members");
         }}
       >
-        Open a guest atelier
+        Open as a guest
       </button>
       <p className="mt-8 text-sm text-muted-foreground">
         New here?{" "}

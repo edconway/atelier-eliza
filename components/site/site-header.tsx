@@ -14,7 +14,7 @@ const links = [
   { href: "/consultations", label: "Sittings" },
   { href: "/chart/new", label: "Draw a chart" },
   { href: "/journal", label: "Journal" },
-  { href: "/members", label: "Atelier" },
+  { href: "/members", label: "Library" },
 ];
 
 export function SiteHeader() {
@@ -23,11 +23,11 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#160a22]/55 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="font-heading text-[1.35rem] tracking-tight">
           <span className="mr-1.5 text-rose">☽</span>
-          Atelier <span className="italic text-rose">Eliza</span>
+          Eliza
         </Link>
         <nav className="hidden items-center gap-7 text-sm md:flex">
           {links.map((link) => (

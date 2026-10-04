@@ -1,12 +1,12 @@
-# Atelier Eliza
+# Eliza
 
-A studio site for **Eliza**, an astrologer in Bath: draw an interactive natal chart, book a sitting, keep a family library of wheels, watch recordings of past hours, and read letters from the journal.
+A studio site for **Eliza**, an astrologer in Bath: draw an interactive natal chart, book a sitting (especially for children’s charts), keep a family library of wheels, watch recordings of past hours, and read letters from the journal.
 
 ## What you can do
 
 - **Draw a natal chart** in four steps (who, when, where, confirm). The wheel is interactive — hover or tap a planet for sign, house, and aspects.
 - **Book a sitting** with Eliza from the header, a chart, or `/book`.
-- **Members atelier** — saved charts (yourself, partner, child, …), session films, and sitting requests.
+- **Members library** — saved charts (yourself, partner, child, …), session films, and sitting requests.
 - **Journal + studio list** — essays and a newsletter signup (stored locally until a real mailer is connected).
 - **AAF interchange** — paste Astro.com exports; download the library for other software.
 
@@ -31,7 +31,7 @@ They also **do not offer a public REST API** for two-way chart sync. What they p
 1. The **Swiss Ephemeris** C library (calculation engine), not a hosted chart API.
 2. Manual **AAF** export from *My Astro* (the `aaf` button appears only if a member has more than ten saved charts).
 
-The atelier therefore:
+The site therefore:
 
 - Draws consultation natal wheels here (interactive, family library, sittings).
 - **Imports and exports AAF** in the members library so people can carry birth data to and from astro.com and other software.
@@ -57,7 +57,7 @@ Open [http://localhost:4327](http://localhost:4327).
 5. Connect **Cal.com** + **Stripe** when Eliza’s calendar should take payment.
 6. Send the studio letters with **Resend**.
 
-Until then, membership, charts, bookings, and newsletter signups persist in the browser (`localStorage`) so the atelier works without secrets.
+Until then, membership, charts, bookings, and newsletter signups persist in the browser (`localStorage`) so the site works without secrets.
 
 ## Stack
 

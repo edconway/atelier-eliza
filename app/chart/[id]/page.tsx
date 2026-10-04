@@ -22,7 +22,7 @@ export default function ChartPage() {
   if (!chart) {
     return (
       <div className="mx-auto max-w-lg px-4 py-24 text-center">
-        <h1 className="font-heading text-3xl">This chart is not in this atelier</h1>
+        <h1 className="font-heading text-3xl">This chart is not in your library</h1>
         <p className="mt-3 text-muted-foreground">
           Charts are kept in your browser. Draw a new one, or sign in on this
           device where you saved it.

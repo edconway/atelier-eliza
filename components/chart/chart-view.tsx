@@ -128,7 +128,7 @@ export function ChartView({ chart }: { chart: NatalChart }) {
           </Button>
           <Button variant="outline" className="rounded-full" asChild>
             <Link href="/members">
-              {member ? "Open in your atelier" : "Save in your atelier"}
+              {member ? "Open your library" : "Save in your library"}
             </Link>
           </Button>
           <ViewOnAstroCom chart={chart} />
@@ -137,7 +137,7 @@ export function ChartView({ chart }: { chart: NatalChart }) {
             className="rounded-full"
             onClick={() => {
               saveChart(chart);
-              toast.success("This wheel is in your atelier.");
+              toast.success("This wheel is in your library.");
             }}
           >
             Keep this wheel
@@ -173,7 +173,7 @@ function BalanceMeter({
               <span>{label}</span>
               <span className="text-muted-foreground">{value}</span>
             </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+            <div className="h-1.5 overflow-hidden rounded-full bg-muted">
               <div
                 className="h-full rounded-full bg-rose"
                 style={{ width: `${(value / max) * 100}%` }}

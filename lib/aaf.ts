@@ -87,7 +87,7 @@ export function parseAaf(text: string): AafNative[] {
 }
 
 export function chartsToAaf(charts: NatalChart[]) {
-  const lines = ["#: Atelier Eliza AAF export"];
+  const lines = ["#: Eliza AAF export"];
   for (const chart of charts) {
     const bits = chart.input.name.trim().split(/\s+/);
     const last = bits.length > 1 ? bits.at(-1) ?? "" : "";

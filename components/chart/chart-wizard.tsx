@@ -120,7 +120,7 @@ export function ChartWizard() {
             key={label}
             className={cn(
               "flex-1 border-b-2 pb-2",
-              index <= step ? "border-rose text-rose" : "border-white/15",
+              index <= step ? "border-rose text-rose" : "border-border",
             )}
           >
             {label}
@@ -135,7 +135,7 @@ export function ChartWizard() {
           </h1>
           <p className="text-muted-foreground">
             Your own sky, or someone you love. You can keep a whole family in
-            the atelier.
+            your library.
           </p>
           <div className="space-y-2">
             <Label htmlFor="who">Their name</Label>
@@ -158,7 +158,7 @@ export function ChartWizard() {
                   "rounded-full border px-4 py-2 text-sm transition",
                   relationship === item.value
                     ? "border-rose bg-rose text-primary-foreground"
-                    : "border-white/15 bg-white/5 hover:border-rose/60",
+                    : "border-border bg-card hover:border-rose/60",
                 )}
               >
                 {item.label}
@@ -177,7 +177,7 @@ export function ChartWizard() {
             Date first. Time if you have it — even a parent’s “around four”
             is worth writing down later with Eliza.
           </p>
-          <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-3">
+          <div className="overflow-hidden rounded-3xl border bg-card p-3">
             <Calendar
               mode="single"
               selected={date}
@@ -278,14 +278,14 @@ export function ChartWizard() {
             </ul>
           )}
           {place && (
-            <p className="rounded-xl border border-rose/40 bg-white/5 px-4 py-3 text-sm">
+            <p className="rounded-xl border border-rose/40 bg-rose/5 px-4 py-3 text-sm">
               {place.name}
               <br />
               {place.latitude.toFixed(4)}°, {place.longitude.toFixed(4)}°
               {place.timezone ? ` · ${place.timezone}` : ""}
             </p>
           )}
-          <details className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <details className="rounded-2xl border bg-card p-4">
             <summary className="cursor-pointer text-sm text-lilac">
               Paste coordinates instead
             </summary>

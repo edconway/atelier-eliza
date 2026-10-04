@@ -4,24 +4,32 @@ import { Button } from "@/components/ui/button";
 import { journalPosts } from "@/lib/journal";
 import { MoonVeil } from "@/components/site/moon-veil";
 
+const essay = [
+  "Let’s face it — we ask a lot of ourselves as ‘conscious parents’. To nourish their childhood as best we can, to do our best, sometimes burnt out and with gritted teeth, to “break the cycle”, to heal our own childhood wounds and climb out of social conditioning in real time whilst juggling mental admin, cooking, everyone’s emotions, physical fights and… oh so much more. We so often feel we’re living in some kind of parallel version of life, a muted, imperfect version, where nothing seems to quite come together the way we feel it should. We see our children struggling in ways that we were led to believe they would not, as long as we followed the conscious parenting advice. Some of us hear siblings saying horrifically cruel things to each other, instilling the traumas we sacrificed years worth of sleep (maybe spent a fortune on therapy) to avoid. Sometimes we even hear such things coming out of our own mouths. And slowly, the list of things we think we can control shrinks. And we do trust in the Mystery. When we don’t feel it, we still say it, as a conclusion to circular discussions about whatever unsolvable situation is currently alive in our family dynamic. And we believe it, we do. But then there’s the biology of being a mother, we do just want everything to be perfect for our babies. Of course we do. So we put it all on ourselves, get more burnt out, keep trying because we care so much. But somehow it feels like we could do better.",
+  "And then we take a look at our child’s horoscope. We come face to face with a unique and marvellous Soul on a hero’s journey. We see awesome gigantic heavenly bodies working out fundamental questions of existence through the Being of the small person smearing peanut butter on the kitchen floor. And then it really lands — their path is a new one; the planets will express through them in uncharted ways. And the conflict, as well as the nourishment, we are giving them, are the medium in which they will write a new universe into Consciousness.",
+  "So while we can’t make everything perfect for them, we can nourish them more effectively by understanding what they, specifically, need to feel nurtured, beyond what the parenting psychology says. We can see from the birth chart how our children might be wired to perceive us as parents. It is very likely not to be how we perceive ourselves. But when we see what they have come to us for, we can work to make sure we give them the highest possible expression of that quality.",
+  "By having a sense of what they are grappling with this lifetime, it’s so much easier to have allowance for their journey. Our children can feel when we honour them and they blossom. And we can give ourselves a break, and really, truly relax into the role they have given us.",
+];
+
 export default function HomePage() {
   const sky = currentSky();
   const letters = journalPosts.slice(0, 3);
 
   return (
     <div>
-      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1.15fr_0.85fr] lg:pb-24">
+      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-12 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1.15fr_0.85fr] lg:pb-16">
         <div>
           <p className="text-[0.7rem] uppercase tracking-[0.38em] text-rose">
-            Bath · by moonlight
+            Bath · children’s charts
           </p>
           <h1 className="mt-5 max-w-3xl font-heading text-5xl leading-[1.02] sm:text-7xl">
-            Your sky,
-            <span className="block italic text-rose">held gently.</span>
+            Their path is
+            <span className="block italic text-rose">a new one.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Eliza draws natal charts as if they were letters — rose-gold on
-            midnight paper — then sits with you while they start to speak.
+            Eliza reads children’s natal charts with parents who are already
+            trying so hard — so the hour can nourish the child in front of you,
+            not the one in the books.
           </p>
           <p className="mt-4 max-w-xl text-sm text-lilac">
             {sky.phase} Moon in {sky.moonSign}, {sky.moonDegree} · Sun in{" "}
@@ -29,44 +37,31 @@ export default function HomePage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg" className="rounded-full px-6">
-              <Link href="/chart/new">Draw a natal chart</Link>
+              <Link href="/book">Readings you can book</Link>
             </Button>
             <Button
               asChild
               size="lg"
               variant="outline"
-              className="rounded-full border-rose/40 bg-white/5 px-6"
+              className="rounded-full px-6"
             >
-              <Link href="/consultations">Sit with Eliza</Link>
+              <Link href="/chart/new">Draw a natal chart</Link>
             </Button>
           </div>
         </div>
         <MoonVeil />
       </section>
 
-      <section className="border-y border-white/10 bg-white/5">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-3">
-          {[
-            {
-              title: "A wheel like jewellery",
-              body: "Hover a planet for sign, house, and aspects. Keep charts for everyone you love — a small constellation of family.",
-            },
-            {
-              title: "An hour in the dark",
-              body: "Natal sittings, follow-ups, a child’s chart handled with consent. You leave with a recording in your atelier.",
-            },
-            {
-              title: "Letters, not horoscopes",
-              body: "The journal follows the Moon. Bring charts from Astro.com as AAF, or take ours with you — no locked garden.",
-            },
-          ].map((item) => (
-            <article key={item.title}>
-              <h2 className="font-heading text-3xl italic">{item.title}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {item.body}
-              </p>
-            </article>
+      <section className="border-y bg-card/70">
+        <div className="mx-auto max-w-3xl space-y-6 px-4 py-16 text-base leading-[1.75] text-foreground/85 sm:px-6 sm:text-lg">
+          {essay.map((paragraph) => (
+            <p key={paragraph.slice(0, 48)}>{paragraph}</p>
           ))}
+          <div className="pt-2">
+            <Button asChild className="rounded-full px-6">
+              <Link href="/book">Book a reading</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -82,7 +77,7 @@ export default function HomePage() {
             <Link
               key={post.slug}
               href={`/journal/${post.slug}`}
-              className="rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:border-rose/50 hover:bg-white/10"
+              className="rounded-3xl border bg-card p-6 transition hover:border-rose/50"
             >
               <p className="text-[0.7rem] uppercase tracking-[0.22em] text-lilac">
                 {post.topic}

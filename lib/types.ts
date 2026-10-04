@@ -7,6 +7,9 @@ export type Relationship =
   | "other";
 
 export type SessionType =
+  | "child"
+  | "child-with-other"
+  | "adult"
   | "natal"
   | "follow-up"
   | "family"

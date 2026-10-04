@@ -96,14 +96,14 @@ export function AafInterchange() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "atelier-eliza-charts.aaf";
+    link.download = "eliza-charts.aaf";
     link.click();
     URL.revokeObjectURL(url);
     toast.success("AAF copied and downloaded.");
   }
 
   return (
-    <section className="mt-12 rounded-3xl border border-rose/25 bg-white/5 p-6">
+    <section className="mt-12 rounded-3xl border border-rose/25 bg-rose/5 p-6">
       <p className="text-[0.7rem] uppercase tracking-[0.28em] text-rose">
         Chart interchange
       </p>
@@ -112,8 +112,8 @@ export function AafInterchange() {
         Astrodienst does not offer an API we can plug into. The honest bridge is{" "}
         <strong className="font-medium text-foreground">AAF</strong> — the
         text format on My Astro (the <em>aaf</em> button, if you have more than
-        ten saved charts). Paste it here to draw those people in Eliza’s
-        atelier. Export ours the same way to take them elsewhere. This site
+        ten saved charts). Paste it here to draw those people in your
+        library. Export yours the same way to take them elsewhere. This site
         will not try to be their entire research desk — transits, returns,
         dozens of house systems — it is the sitting, the library, and a wheel
         you can actually live with.

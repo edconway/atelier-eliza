@@ -21,20 +21,19 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useAtelier } from "@/lib/atelier-store";
+import { sittings } from "@/lib/sittings";
 import type { SessionType } from "@/lib/types";
 
-const types: { value: SessionType; label: string }[] = [
-  { value: "natal", label: "Natal sitting" },
-  { value: "follow-up", label: "Follow-up" },
-  { value: "family", label: "Family / child’s chart" },
-  { value: "year-ahead", label: "Year ahead" },
-];
+const types = sittings.map((sitting) => ({
+  value: sitting.value,
+  label: sitting.title,
+}));
 
 export function BookingForm({ onDone }: { onDone?: () => void }) {
   const { charts, member, addBooking } = useAtelier();
   const [name, setName] = useState(member?.name ?? "");
   const [email, setEmail] = useState(member?.email ?? "");
-  const [sessionType, setSessionType] = useState<SessionType>("natal");
+  const [sessionType, setSessionType] = useState<SessionType>("child");
   const [preferredDate, setPreferredDate] = useState("");
   const [chartId, setChartId] = useState("none");
   const [notes, setNotes] = useState("");
@@ -64,8 +63,8 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
       <div className="space-y-3">
         <h2 className="font-heading text-2xl">Held for you</h2>
         <p className="text-sm text-muted-foreground">
-          Eliza will write within a few days with a time. Your request also
-          lives in the atelier, beside your charts.
+          Eliza will write within a few days with a time. Your request is also
+          kept with your saved charts.
         </p>
         {onDone ? <Button onClick={onDone}>Close</Button> : null}
       </div>
@@ -169,8 +168,8 @@ export function BookingDialog() {
             Book a sitting
           </DialogTitle>
           <DialogDescription>
-            An hour in the studio — in person in Bath, or by video. Eliza draws
-            the chart before you arrive.
+            An hour in Bath, or by video. Eliza draws the chart before you
+            arrive.
           </DialogDescription>
         </DialogHeader>
         <BookingForm onDone={() => setBookingOpen(false)} />
