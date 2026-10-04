@@ -12,13 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useAtelier } from "@/lib/atelier-store";
 import { sittings } from "@/lib/sittings";
@@ -96,22 +89,22 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <Label>Sitting</Label>
-          <Select
+          <Label htmlFor="bk-sitting">Sitting</Label>
+          <select
+            id="bk-sitting"
+            required
             value={sessionType}
-            onValueChange={(value) => setSessionType(value as SessionType)}
+            onChange={(event) =>
+              setSessionType(event.target.value as SessionType)
+            }
+            className="h-9 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           >
-            <SelectTrigger className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {types.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  {type.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            {types.map((type) => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="bk-date">Preferred date</Label>
@@ -125,20 +118,20 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label>Chart to discuss</Label>
-        <Select value={chartId} onValueChange={setChartId}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="I’ll cast one with Eliza" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">I’ll cast one with Eliza</SelectItem>
-            {chartOptions.map((chart) => (
-              <SelectItem key={chart.id} value={chart.id}>
-                {chart.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Label htmlFor="bk-chart">Chart to discuss</Label>
+        <select
+          id="bk-chart"
+          value={chartId}
+          onChange={(event) => setChartId(event.target.value)}
+          className="h-9 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          <option value="none">I’ll cast one with Eliza</option>
+          {chartOptions.map((chart) => (
+            <option key={chart.id} value={chart.id}>
+              {chart.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="bk-notes">What is living in you just now?</Label>

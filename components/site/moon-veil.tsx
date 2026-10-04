@@ -1,6 +1,6 @@
 export function MoonVeil() {
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-md">
+    <div className="relative mx-auto aspect-square min-h-72 w-full max-w-md">
       <div className="absolute inset-[8%] rounded-full bg-rose/20 blur-3xl" />
       <div className="absolute inset-[18%] rounded-full bg-lilac/15 blur-2xl" />
       <div
