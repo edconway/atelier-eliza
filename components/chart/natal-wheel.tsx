@@ -6,7 +6,10 @@ import {
   ASPECT_COLORS,
   PLANET_GLYPHS,
   SIGN_COLORS,
+  SIGN_ELEMENTS,
   SIGN_GLYPHS,
+  SIGN_MODALITIES,
+  SIGN_NOTES,
   titleCase,
 } from "@/lib/glyphs";
 import type { ChartBody, NatalChart } from "@/lib/types";
@@ -56,6 +59,7 @@ export function NatalWheel({
   onSelect: (id: string | null) => void;
 }) {
   const [hoverId, setHoverId] = useState<string | null>(null);
+  const [hoverSign, setHoverSign] = useState<string | null>(null);
   const activeId = hoverId ?? selectedId;
   const rising = chart.bodies.find((body) => body.id === "ascendant");
 
@@ -127,11 +131,19 @@ export function NatalWheel({
           const mid = (h1 - 15 + 360) % 360;
           const label = pt(mid, 286);
           return (
-            <g key={sign}>
+            <g
+              key={sign}
+              className="cursor-pointer"
+              onMouseEnter={() => setHoverSign(sign)}
+              onMouseLeave={() => setHoverSign(null)}
+              onClick={() =>
+                setHoverSign((current) => (current === sign ? null : sign))
+              }
+            >
               <path
                 d={sector(h1, h2, 308, 258)}
                 fill={SIGN_COLORS[sign]}
-                fillOpacity={0.22}
+                fillOpacity={hoverSign === sign ? 0.45 : 0.22}
                 stroke="#d9a0b8"
                 strokeOpacity={0.45}
               />
@@ -143,6 +155,9 @@ export function NatalWheel({
                 className="font-glyph text-[18px]"
                 fill="#6a3850"
               >
+                <title>
+                  {titleCase(sign)}. {SIGN_NOTES[sign]}
+                </title>
                 {SIGN_GLYPHS[sign]}
               </text>
             </g>
@@ -265,9 +280,21 @@ export function NatalWheel({
               })}
           </ul>
         </div>
+      ) : hoverSign ? (
+        <div className="pointer-events-none absolute inset-x-4 bottom-3 mx-auto max-w-sm rounded-2xl border bg-card px-4 py-3 text-foreground shadow-md sm:inset-x-auto sm:right-3 sm:bottom-6 sm:left-auto">
+          <p className="font-heading text-lg">
+            <span className="font-glyph mr-2">{SIGN_GLYPHS[hoverSign]}</span>
+            {titleCase(hoverSign)}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {titleCase(SIGN_ELEMENTS[hoverSign])} ·{" "}
+            {titleCase(SIGN_MODALITIES[hoverSign])}
+          </p>
+          <p className="mt-2 text-sm">{SIGN_NOTES[hoverSign]}</p>
+        </div>
       ) : (
         <p className="mt-3 text-center text-sm text-muted-foreground">
-          Hover a planet — tap on a phone — to see sign, house, and aspects.
+          Hover a sign or a planet. On a phone, tap it.
         </p>
       )}
     </div>

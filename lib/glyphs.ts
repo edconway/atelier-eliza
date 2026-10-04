@@ -62,6 +62,21 @@ export const SIGN_MODALITIES: Record<string, keyof import("./types").ModalityBal
   pisces: "mutable",
 };
 
+export const SIGN_NOTES: Record<string, string> = {
+  aries: "Begins things.",
+  taurus: "Holds on to what has value.",
+  gemini: "Language, and more than one option.",
+  cancer: "Home and care.",
+  leo: "Being seen, and self-expression.",
+  virgo: "Detail and what is useful.",
+  libra: "Other people, and weighing a choice.",
+  scorpio: "Intensity, and what stays private.",
+  sagittarius: "Belief, distance, and a wider view.",
+  capricorn: "Work, duty, and long-term structure.",
+  aquarius: "Groups, ideas, and standing apart.",
+  pisces: "Imagination, and boundaries that blur.",
+};
+
 export const SIGN_COLORS: Record<string, string> = {
   aries: "#c45a78",
   taurus: "#7a62b0",
