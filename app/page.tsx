@@ -6,6 +6,23 @@ import { MoonVeil } from "@/components/site/moon-veil";
 
 export const dynamic = "force-dynamic";
 
+const BAND_STARS = [
+  [7, 16],
+  [14, 48],
+  [22, 78],
+  [31, 24],
+  [38, 62],
+  [47, 12],
+  [54, 84],
+  [63, 34],
+  [71, 58],
+  [79, 18],
+  [86, 74],
+  [93, 40],
+  [18, 90],
+  [58, 8],
+];
+
 const essay = [
   "Let’s face it — we ask a lot of ourselves as ‘conscious parents’. To nourish their childhood as best we can, to do our best, sometimes burnt out and with gritted teeth, to “break the cycle”, to heal our own childhood wounds and climb out of social conditioning in real time whilst juggling mental admin, cooking, everyone’s emotions, physical fights and… oh so much more. We so often feel we’re living in some kind of parallel version of life, a muted, imperfect version, where nothing seems to quite come together the way we feel it should. We see our children struggling in ways that we were led to believe they would not, as long as we followed the conscious parenting advice. Some of us hear siblings saying horrifically cruel things to each other, instilling the traumas we sacrificed years worth of sleep (maybe spent a fortune on therapy) to avoid. Sometimes we even hear such things coming out of our own mouths. And slowly, the list of things we think we can control shrinks. And we do trust in the Mystery. When we don’t feel it, we still say it, as a conclusion to circular discussions about whatever unsolvable situation is currently alive in our family dynamic. And we believe it, we do. But then there’s the biology of being a mother, we do just want everything to be perfect for our babies. Of course we do. So we put it all on ourselves, get more burnt out, keep trying because we care so much. But somehow it feels like we could do better.",
   "And then we take a look at our child’s horoscope. We come face to face with a unique and marvellous Soul on a hero’s journey. We see awesome gigantic heavenly bodies working out fundamental questions of existence through the Being of the small person smearing peanut butter on the kitchen floor. And then it really lands — their path is a new one; the planets will express through them in uncharted ways. And the conflict, as well as the nourishment, we are giving them, are the medium in which they will write a new universe into Consciousness.",
@@ -21,43 +38,69 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-12 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[1.15fr_0.85fr] lg:pb-16">
-        <div>
-          <h1 className="max-w-3xl font-heading text-5xl leading-[1.05] sm:text-6xl">
-            Natal charts for Children
-          </h1>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="rounded-full px-6">
-              <Link href="/book">Readings you can book</Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="rounded-full px-6"
-            >
-              <Link href="/chart/new">Draw a natal chart</Link>
-            </Button>
-          </div>
+      <section
+        className={`relative overflow-hidden ${view.lightText ? "text-[#f4f1ea]" : ""}`}
+        style={{
+          background: `linear-gradient(180deg, ${view.top} 0%, ${view.bottom} 100%)`,
+        }}
+      >
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          {BAND_STARS.map(([left, top], index) => (
+            <span
+              key={`${left}-${top}`}
+              className="absolute size-[3px] rounded-full bg-white"
+              style={{
+                left: `${left}%`,
+                top: `${top}%`,
+                opacity: view.night * (index % 3 === 0 ? 0.9 : 0.4),
+              }}
+            />
+          ))}
         </div>
-        <figure className="mx-auto w-full max-w-sm text-center">
-          <MoonVeil elongation={sky.elongation} />
-          <figcaption className="mt-2">
-            <p className="font-heading text-3xl">{sky.phase} Moon</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {sky.waxing ? "Waxing" : "Waning"} · {lit}% illuminated
-            </p>
-            <p className="mt-3 text-sm">
-              Moon {sky.moonDegree} {sky.moonSign}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Sun {sky.sunDegree} {sky.sunSign}
-            </p>
-            <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-              {view.when}. Tropical zodiac, for this moment.
-            </p>
-          </figcaption>
-        </figure>
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1.15fr_0.85fr]">
+          <div>
+            <h1 className="max-w-3xl font-heading text-5xl leading-[1.05] sm:text-6xl">
+              Natal charts for Children
+            </h1>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild size="lg" className="rounded-full px-6">
+                <Link href="/book">Readings you can book</Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="rounded-full px-6"
+              >
+                <Link href="/chart/new">Draw a natal chart</Link>
+              </Button>
+            </div>
+          </div>
+          <figure className="mx-auto w-full max-w-sm text-center">
+            <MoonVeil elongation={sky.elongation} />
+            <figcaption className="mt-2">
+              <p className="font-heading text-3xl">{sky.phase} Moon</p>
+              <p
+                className={`mt-1 text-sm ${view.lightText ? "text-[#f4f1ea]/75" : "text-muted-foreground"}`}
+              >
+                {sky.waxing ? "Waxing" : "Waning"} · {lit}% illuminated
+              </p>
+              <p className="mt-3 text-sm">
+                Moon {sky.moonDegree} {sky.moonSign}
+              </p>
+              <p
+                className={`text-sm ${view.lightText ? "text-[#f4f1ea]/75" : "text-muted-foreground"}`}
+              >
+                Sun {sky.sunDegree} {sky.sunSign}
+              </p>
+              <p
+                className={`mt-3 text-xs leading-relaxed ${view.lightText ? "text-[#f4f1ea]/75" : "text-muted-foreground"}`}
+              >
+                {view.when}. Tropical zodiac, for this moment.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
       </section>
 
       <section className="border-y bg-card/70">

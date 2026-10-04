@@ -75,8 +75,24 @@ function mixChannel(start: number, end: number, t: number) {
   return Math.round(start + (end - start) * t);
 }
 
-function mixRgb(start: Rgb, end: Rgb, t: number) {
-  return `rgb(${mixChannel(start[0], end[0], t)}, ${mixChannel(start[1], end[1], t)}, ${mixChannel(start[2], end[2], t)})`;
+function mixRgb(start: Rgb, end: Rgb, t: number): Rgb {
+  return [
+    mixChannel(start[0], end[0], t),
+    mixChannel(start[1], end[1], t),
+    mixChannel(start[2], end[2], t),
+  ];
+}
+
+function cssRgb(rgb: Rgb) {
+  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+}
+
+function relLuminance(rgb: Rgb) {
+  const linear = rgb.map((channel) => {
+    const s = channel / 255;
+    return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
 }
 
 export function moonViewSky(elongation: number) {
@@ -86,11 +102,14 @@ export function moonViewSky(elongation: number) {
   const from = SKY_STOPS[index];
   const to = SKY_STOPS[index + 1];
   const t = (angle - from.at) / (to.at - from.at);
+  const top = mixRgb(from.top, to.top, t);
+  const bottom = mixRgb(from.bottom, to.bottom, t);
   return {
-    top: mixRgb(from.top, to.top, t),
-    bottom: mixRgb(from.bottom, to.bottom, t),
+    top: cssRgb(top),
+    bottom: cssRgb(bottom),
     night: from.night + (to.night - from.night) * t,
     when: t < 0.5 ? from.when : to.when,
+    lightText: (relLuminance(top) + relLuminance(bottom)) / 2 < 0.4,
   };
 }
 
