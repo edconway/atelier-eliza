@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { currentSky } from "@/lib/sky";
+import { currentSky, moonViewSky } from "@/lib/sky";
 import { Button } from "@/components/ui/button";
 import { journalPosts } from "@/lib/journal";
 import { MoonVeil } from "@/components/site/moon-veil";
@@ -15,6 +15,7 @@ const essay = [
 
 export default function HomePage() {
   const sky = currentSky();
+  const view = moonViewSky(sky.elongation);
   const letters = journalPosts.slice(0, 3);
   const lit = Math.round(sky.illumination * 100);
 
@@ -53,8 +54,7 @@ export default function HomePage() {
               Sun {sky.sunDegree} {sky.sunSign}
             </p>
             <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-              The Moon right now, tropical zodiac. It moves about half a degree
-              an hour, and changes sign every two or three days.
+              {view.when}. Tropical zodiac, for this moment.
             </p>
           </figcaption>
         </figure>

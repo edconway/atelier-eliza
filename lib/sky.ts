@@ -51,6 +51,49 @@ function formatInSign(longitude: number) {
   return `${degrees}°${String(minutes).padStart(2, "0")}′`;
 }
 
+type Rgb = [number, number, number];
+
+const SKY_STOPS: {
+  at: number;
+  top: Rgb;
+  bottom: Rgb;
+  night: number;
+  when: string;
+}[] = [
+  { at: 0, top: [168, 208, 230], bottom: [226, 238, 246], night: 0, when: "Seen in the daytime" },
+  { at: 45, top: [32, 52, 108], bottom: [214, 132, 92], night: 0.45, when: "Seen after sunset" },
+  { at: 90, top: [20, 40, 92], bottom: [176, 96, 84], night: 0.6, when: "Seen in the evening" },
+  { at: 135, top: [12, 22, 52], bottom: [24, 40, 78], night: 0.88, when: "Seen in the evening and at night" },
+  { at: 180, top: [6, 10, 22], bottom: [12, 18, 38], night: 1, when: "Seen through the night" },
+  { at: 225, top: [10, 16, 36], bottom: [28, 42, 68], night: 0.82, when: "Seen after midnight" },
+  { at: 270, top: [142, 190, 220], bottom: [244, 226, 204], night: 0.08, when: "Seen in the morning" },
+  { at: 315, top: [104, 164, 206], bottom: [240, 186, 150], night: 0.12, when: "Seen before sunrise" },
+  { at: 360, top: [168, 208, 230], bottom: [226, 238, 246], night: 0, when: "Seen in the daytime" },
+];
+
+function mixChannel(start: number, end: number, t: number) {
+  return Math.round(start + (end - start) * t);
+}
+
+function mixRgb(start: Rgb, end: Rgb, t: number) {
+  return `rgb(${mixChannel(start[0], end[0], t)}, ${mixChannel(start[1], end[1], t)}, ${mixChannel(start[2], end[2], t)})`;
+}
+
+export function moonViewSky(elongation: number) {
+  const angle = ((elongation % 360) + 360) % 360;
+  let index = 0;
+  while (SKY_STOPS[index + 1].at < angle) index += 1;
+  const from = SKY_STOPS[index];
+  const to = SKY_STOPS[index + 1];
+  const t = (angle - from.at) / (to.at - from.at);
+  return {
+    top: mixRgb(from.top, to.top, t),
+    bottom: mixRgb(from.bottom, to.bottom, t),
+    night: from.night + (to.night - from.night) * t,
+    when: t < 0.5 ? from.when : to.when,
+  };
+}
+
 export type CurrentSky = {
   phase: string;
   waxing: boolean;

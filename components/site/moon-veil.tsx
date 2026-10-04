@@ -1,10 +1,30 @@
+import { moonViewSky } from "@/lib/sky";
+
 /**
  * Northern-hemisphere Moon.
  * elongation 0 = new, 90 = first quarter, 180 = full, 270 = last quarter.
  * Waxing light is on the right. Waning light is on the left.
  *
+ * The sky behind the disc is the time of day that phase is usually up:
+ * daytime at new, evening while waxing, night at full, morning while waning.
+ *
  * Surface: NASA/JPL/USGS Galileo image PIA00405, public domain, shown in gray.
  */
+
+const STARS = [
+  [14, 12],
+  [24, 22],
+  [8, 34],
+  [18, 78],
+  [10, 88],
+  [78, 8],
+  [90, 16],
+  [84, 30],
+  [92, 72],
+  [80, 88],
+  [46, 6],
+  [62, 14],
+];
 
 const CX = 100;
 const CY = 100;
@@ -25,9 +45,26 @@ export function MoonVeil({ elongation }: { elongation: number }) {
   const full = phase > 0.47 && phase < 0.53;
   const isNew = phase < 0.03 || phase > 0.97;
   const lightFromRight = phase <= 0.5;
+  const sky = moonViewSky(elongation);
 
   return (
-    <div className="relative mx-auto aspect-square min-h-72 w-full max-w-sm">
+    <div
+      className="relative mx-auto aspect-square min-h-72 w-full max-w-sm overflow-hidden rounded-[2rem]"
+      style={{
+        background: `linear-gradient(180deg, ${sky.top} 0%, ${sky.bottom} 100%)`,
+      }}
+    >
+      {STARS.map(([left, top], index) => (
+        <span
+          key={`${left}-${top}`}
+          className="pointer-events-none absolute size-[3px] rounded-full bg-white"
+          style={{
+            left: `${left}%`,
+            top: `${top}%`,
+            opacity: sky.night * (index % 3 === 0 ? 0.9 : 0.45),
+          }}
+        />
+      ))}
       <svg
         viewBox="0 0 200 200"
         className="relative h-full w-full drop-shadow-[0_18px_30px_rgba(24,20,22,0.28)]"
