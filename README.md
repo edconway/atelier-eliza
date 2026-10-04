@@ -1,6 +1,6 @@
 # Eliza
 
-A studio site for **Eliza**, an astrologer in Bath: draw an interactive natal chart, book a sitting (especially for children’s charts), keep a family library of wheels, watch recordings of past hours, and read letters from the journal.
+A site for Eliza: natal charts for children, bookings, a library of saved charts, session recordings, and a short journal.
 
 ## What you can do
 

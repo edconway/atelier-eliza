@@ -33,11 +33,11 @@ const symbols = Noto_Sans_Symbols_2({
 
 export const metadata: Metadata = {
   title: {
-    default: "Eliza — children’s charts and sittings",
+    default: "Eliza — natal charts for children",
     template: "%s · Eliza",
   },
   description:
-    "Natal charts and sittings with Eliza in Bath, especially for parents who want to nourish the child in front of them.",
+    "Natal charts for children, and bookings with Eliza.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

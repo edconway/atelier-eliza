@@ -48,16 +48,15 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
       notes,
     });
     setSent(true);
-    toast.success("The studio has your request. Eliza will confirm by email.");
+    toast.success("Request received.");
   }
 
   if (sent) {
     return (
       <div className="space-y-3">
-        <h2 className="font-heading text-2xl">Held for you</h2>
+        <h2 className="font-heading text-2xl">Request saved</h2>
         <p className="text-sm text-muted-foreground">
-          Eliza will write within a few days with a time. Your request is also
-          kept with your saved charts.
+          Your request is saved with your charts.
         </p>
         {onDone ? <Button onClick={onDone}>Close</Button> : null}
       </div>
@@ -125,7 +124,7 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
           onChange={(event) => setChartId(event.target.value)}
           className="h-9 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         >
-          <option value="none">I’ll cast one with Eliza</option>
+          <option value="none">No saved chart</option>
           {chartOptions.map((chart) => (
             <option key={chart.id} value={chart.id}>
               {chart.name}
@@ -134,17 +133,17 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
         </select>
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="bk-notes">What is living in you just now?</Label>
+        <Label htmlFor="bk-notes">Notes</Label>
         <Textarea
           id="bk-notes"
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
           rows={3}
-          placeholder="A question you can sit with for an hour."
+          placeholder="Optional."
         />
       </div>
       <Button type="submit" className="w-full">
-        Request the hour
+        Send request
       </Button>
     </form>
   );
@@ -160,10 +159,7 @@ export function BookingDialog() {
           <DialogTitle className="font-heading text-2xl">
             Book a sitting
           </DialogTitle>
-          <DialogDescription>
-            An hour in Bath, or by video. Eliza draws the chart before you
-            arrive.
-          </DialogDescription>
+          <DialogDescription>Request a reading.</DialogDescription>
         </DialogHeader>
         <BookingForm onDone={() => setBookingOpen(false)} />
       </DialogContent>

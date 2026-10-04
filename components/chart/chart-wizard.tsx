@@ -101,7 +101,7 @@ export function ChartWizard() {
         throw new Error(data.error ?? "The chart could not be drawn.");
       }
       saveChart(data.chart);
-      toast.success("The wheel is drawn.");
+      toast.success("Chart ready.");
       router.push(`/chart/${data.chart.id}`);
     } catch (error) {
       toast.error(
@@ -130,12 +130,11 @@ export function ChartWizard() {
 
       {step === 0 && (
         <section className="space-y-6">
-          <h1 className="font-heading text-5xl tracking-tight italic">
+          <h1 className="font-heading text-5xl tracking-tight">
             Who is this chart for?
           </h1>
           <p className="text-muted-foreground">
-            Your own sky, or someone you love. You can keep a whole family in
-            your library.
+            You, or someone else. Saved charts stay in your library.
           </p>
           <div className="space-y-2">
             <Label htmlFor="who">Their name</Label>
@@ -171,11 +170,11 @@ export function ChartWizard() {
       {step === 1 && (
         <section className="space-y-6">
           <h1 className="font-heading text-4xl tracking-tight">
-            When did they arrive?
+            Date and time of birth
           </h1>
           <p className="text-muted-foreground">
-            Date first. Time if you have it — even a parent’s “around four”
-            is worth writing down later with Eliza.
+            Add the time if you have it. If you don’t, the chart is drawn for
+            noon.
           </p>
           <div className="overflow-hidden rounded-3xl border bg-card p-3">
             <Calendar
@@ -222,8 +221,7 @@ export function ChartWizard() {
           )}
           {unknownTime && (
             <p className="rounded-xl bg-rose/15 px-4 py-3 text-sm">
-              We’ll draw a noon chart. The Sun and planets still speak; the
-              rising sign and houses are estimates until a time is found.
+              Noon chart. The rising sign and houses are estimates.
             </p>
           )}
         </section>
@@ -232,7 +230,7 @@ export function ChartWizard() {
       {step === 2 && (
         <section className="space-y-6">
           <h1 className="font-heading text-4xl tracking-tight">
-            Where on Earth?
+            Place of birth
           </h1>
           <p className="text-muted-foreground">
             City and country. We find coordinates and the timezone that was
@@ -247,7 +245,7 @@ export function ChartWizard() {
                 setQuery(event.target.value);
                 setPlace(null);
               }}
-              placeholder="Lisbon, Kyoto, Bath…"
+              placeholder="Lisbon, Kyoto, Nairobi…"
               className="h-12 text-base"
             />
           </div>
@@ -344,14 +342,14 @@ export function ChartWizard() {
       {step === 3 && input && (
         <section className="space-y-6">
           <h1 className="font-heading text-4xl tracking-tight">
-            Does this read true?
+            Check these details
           </h1>
           <p className="font-heading text-2xl leading-snug text-foreground">
             {formatBirthSentence(input)}
           </p>
           <p className="text-sm text-muted-foreground">
-            Tropical zodiac, Placidus houses, timezone taken from the
-            coordinates. You can save the wheel for anyone in your family.
+            Tropical zodiac, Placidus houses. Timezone comes from the
+            coordinates.
           </p>
         </section>
       )}

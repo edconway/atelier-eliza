@@ -27,9 +27,8 @@ export default function SignInPage() {
       </p>
       <h1 className="mt-4 font-heading text-4xl">Your library</h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        Charts and films live on this device for now. When Eliza hosts the
-        site, this becomes a true account. A name and email are enough to
-        keep the room labelled as yours.
+        Charts and recordings are stored in this browser for now. A name and
+        email label them as yours.
       </p>
       <form onSubmit={onSubmit} className="mt-8 space-y-4">
         <div className="space-y-1.5">
@@ -59,7 +58,7 @@ export default function SignInPage() {
         type="button"
         className="mt-4 text-sm text-gold-ink underline"
         onClick={() => {
-          signIn({ name: "Guest of the studio", email: "guest@atelier-eliza.test" });
+          signIn({ name: "Guest", email: "guest@example.com" });
           router.push("/members");
         }}
       >

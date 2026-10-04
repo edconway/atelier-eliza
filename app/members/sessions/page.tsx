@@ -32,10 +32,9 @@ export default function MembersSessionsPage() {
         </Link>{" "}
         · Films
       </p>
-      <h1 className="mt-3 font-heading text-4xl">Sittings with Eliza</h1>
+      <h1 className="mt-3 font-heading text-4xl">Recordings</h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
-        After each hour, the recording is kept here. These studio films are
-        placeholders until Eliza uploads your own.
+        Recordings of your readings are kept here.
       </p>
       {film && (
         <div className="mt-10 overflow-hidden rounded-2xl border bg-foreground">

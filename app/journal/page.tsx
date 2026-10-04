@@ -10,17 +10,11 @@ export const metadata: Metadata = {
 export default function JournalPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
-      <p className="text-xs uppercase tracking-[0.28em] text-gold-ink">
-        Letters
-      </p>
       <h1 className="mt-4 font-heading text-5xl tracking-tight">Journal</h1>
-      <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-        Essays from the studio, and the same letters that go to the list.
-      </p>
       <div className="mt-10 max-w-lg rounded-2xl border bg-card p-5">
-        <p className="font-heading text-xl">Join the studio list</p>
+        <p className="font-heading text-xl">Join the list</p>
         <p className="mt-2 mb-4 text-sm text-muted-foreground">
-          A note with the Moon. You can leave whenever you like.
+          Occasional emails. You can unsubscribe.
         </p>
         <NewsletterForm />
       </div>

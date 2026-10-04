@@ -11,6 +11,6 @@ export async function POST(request: Request) {
   }
   return NextResponse.json({
     ok: true,
-    message: "You are on the studio list. Letters go out with the Moon.",
+    message: "You’re on the list.",
   });
 }

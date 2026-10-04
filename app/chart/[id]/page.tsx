@@ -14,7 +14,7 @@ export default function ChartPage() {
   if (!ready) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-24 text-muted-foreground">
-        Opening the wheel…
+        Opening the chart…
       </div>
     );
   }

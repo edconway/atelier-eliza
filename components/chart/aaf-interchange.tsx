@@ -75,8 +75,8 @@ export function AafInterchange() {
       } else {
         toast.success(
           imported === 1
-            ? "One chart arrived from AAF."
-            : `${imported} charts arrived from AAF.`,
+            ? "Imported 1 chart."
+            : `Imported ${imported} charts.`,
         );
         setPaste("");
       }
@@ -107,20 +107,15 @@ export function AafInterchange() {
       <p className="text-[0.7rem] uppercase tracking-[0.28em] text-rose">
         Chart interchange
       </p>
-      <h2 className="mt-2 font-heading text-3xl italic">Astro.com and other software</h2>
+      <h2 className="mt-2 font-heading text-3xl">Astro.com and other software</h2>
       <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-        Astrodienst does not offer an API we can plug into. The honest bridge is{" "}
-        <strong className="font-medium text-foreground">AAF</strong> — the
-        text format on My Astro (the <em>aaf</em> button, if you have more than
-        ten saved charts). Paste it here to draw those people in your
-        library. Export yours the same way to take them elsewhere. This site
-        will not try to be their entire research desk — transits, returns,
-        dozens of house systems — it is the sitting, the library, and a wheel
-        you can actually live with.
+        Astro.com does not offer an API. Paste an AAF export from My Astro
+        (the aaf button appears if you have more than ten saved charts) to add
+        those charts here. You can also export this library as AAF.
       </p>
       <Textarea
         className="mt-5 min-h-32 font-mono text-xs"
-        placeholder="#A93:Last,First,,12.4.1986,7:42,Bath,UK"
+        placeholder="#A93:Last,First,,12.4.1986,7:42,Lisbon,PT"
         value={paste}
         onChange={(event) => setPaste(event.target.value)}
       />

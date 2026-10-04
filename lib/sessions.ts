@@ -6,8 +6,7 @@ export const sessionFilms: SessionFilm[] = [
     title: "Natal sitting — first hour",
     date: "18 January 2026",
     duration: "58 min",
-    synopsis:
-      "Eliza and you walk the Big Three, then stay a long time with the Moon. The last ten minutes are practical: what to notice before the next lunation.",
+    synopsis: "Sample recording of a natal session.",
     videoSrc:
       "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
   },
@@ -16,8 +15,7 @@ export const sessionFilms: SessionFilm[] = [
     title: "Follow-up — houses of work",
     date: "9 March 2026",
     duration: "44 min",
-    synopsis:
-      "A shorter sitting on the 6th and 10th. Eliza asks you to describe an ordinary Tuesday. The chart answers in kind.",
+    synopsis: "Sample recording of a follow-up.",
     videoSrc:
       "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
   },
@@ -26,8 +24,7 @@ export const sessionFilms: SessionFilm[] = [
     title: "Family hour — Rowan’s chart",
     date: "2 May 2026",
     duration: "51 min",
-    synopsis:
-      "A parent’s sitting, with the child’s wheel on the table. Consent, care, and what not to say out loud in front of a seven-year-old.",
+    synopsis: "Sample recording of a session about a child’s chart.",
     videoSrc:
       "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
   },

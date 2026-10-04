@@ -45,7 +45,7 @@ export default async function JournalPostPage({
         ))}
       </div>
       <div className="mt-14 rounded-2xl border bg-card p-5">
-        <p className="font-heading text-xl">Receive the next letter</p>
+        <p className="font-heading text-xl">Get new posts by email</p>
         <div className="mt-4">
           <NewsletterForm />
         </div>

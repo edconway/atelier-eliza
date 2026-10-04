@@ -14,25 +14,19 @@ export default function ConsultationsPage() {
         Readings you can book
       </p>
       <h1 className="mt-4 font-heading text-5xl tracking-tight">Sittings</h1>
-      <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-        In the Bath studio, or by video. Eliza draws the chart before you
-        arrive. Tea is provided; recordings are kept for you.
-      </p>
       <div className="mt-12 grid gap-5 lg:grid-cols-3">
         {sittings.map((sitting) => (
           <SittingCard key={sitting.value} sitting={sitting} />
         ))}
       </div>
-      <p className="mt-12 text-sm text-muted-foreground">
-        Prefer to meet the sky first?{" "}
+      <p className="mt-12 text-sm">
         <Link href="/chart/new" className="text-rose underline">
           Draw a natal chart
-        </Link>{" "}
-        and bring it to the hour. Or{" "}
-        <Link href="/book" className="text-rose underline">
-          request a reading
         </Link>
-        .
+        {" · "}
+        <Link href="/book" className="text-rose underline">
+          Request a reading
+        </Link>
       </p>
     </div>
   );

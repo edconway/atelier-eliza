@@ -134,42 +134,29 @@ function firstLook(chart: {
   name: string;
 }) {
   const lines: string[] = [];
-  const first = chart.name.split(" ")[0];
   if (chart.sun) {
-    lines.push(
-      `${first}’s Sun in ${titleCase(chart.sun.sign)} is the hearth of the chart — how they shine when nobody is asking them to perform.`,
-    );
+    lines.push(`Sun in ${titleCase(chart.sun.sign)}.`);
   }
   if (chart.moon) {
     lines.push(
-      `The Moon in ${titleCase(chart.moon.sign)}${chart.moon.house ? `, in house ${chart.moon.house}` : ""} describes the weather inside: what soothes, what startles, what they need before they can speak.`,
+      `Moon in ${titleCase(chart.moon.sign)}${chart.moon.house ? `, house ${chart.moon.house}` : ""}.`,
     );
   }
   if (chart.unknownTime) {
     lines.push(
-      "Birth time is unknown, so the rising sign and houses are a noon estimate. A sitting with Eliza can still go deep with the planets; the angles wait for a time.",
+      "Birth time unknown. Rising sign and houses are a noon estimate.",
     );
   } else if (chart.rising) {
-    lines.push(
-      `${titleCase(chart.rising.sign)} rising is the door of the chart — the way the room changes when they enter it.`);
+    lines.push(`${titleCase(chart.rising.sign)} rising.`);
   }
   const dominant = (
     Object.entries(chart.elements) as [keyof ElementBalance, number][]
   ).sort((a, b) => b[1] - a[1])[0];
-  if (dominant) {
-    const gloss: Record<keyof ElementBalance, string> = {
-      fire: "warmth and appetite for becoming",
-      earth: "a need to make things real and keep them",
-      air: "a mind that thinks by speaking and relating",
-      water: "a tide of memory, loyalty, and feeling",
-    };
+  if (dominant && dominant[1] > 0) {
     lines.push(
-      `The personal planets lean ${dominant[0]}: ${gloss[dominant[0]]}.`,
+      `Most personal planets are in ${dominant[0]} (${dominant[1]}).`,
     );
   }
-  lines.push(
-    "This is a first look, not a reading. Eliza’s sittings are where the story is allowed to be specific.",
-  );
   return lines;
 }
 

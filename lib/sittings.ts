@@ -12,21 +12,21 @@ export const sittings: {
     title: "One child, one hour",
     time: "60 minutes",
     price: "£120",
-    body: "The child’s chart is the whole of the hour. What they are grappling with this lifetime, how they might be wired to perceive you, and how to nourish them beyond the parenting advice.",
+    body: "One child’s chart. One hour.",
   },
   {
     value: "child-with-other",
     title: "One child, with one other person",
     time: "75 minutes",
     price: "£150",
-    body: "One child as the primary focus, with one other person — child or adult — brought in to see how their planets interact with that child. A little more expensive, and often the sitting that unlocks a family dynamic.",
+    body: "One child as the main focus, with one other person — child or adult — included to see how their planets interact with that child. A bit more expensive.",
   },
   {
     value: "adult",
     title: "Your own hero’s journey",
     time: "75 minutes",
     price: "£140",
-    body: "Would you like to explore your own hero’s journey first? One adult, seventy-five minutes. Then a reduced rate for the child’s sitting that follows.",
+    body: "One adult, 75 minutes. Then a reduced rate for the child.",
   },
 ];
 

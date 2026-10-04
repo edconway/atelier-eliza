@@ -25,19 +25,19 @@ export default function MembersChartsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "Eliza",
+          name: "Sample",
           relationship: "other",
-          year: 1986,
-          month: 4,
-          day: 12,
-          hour: 7,
-          minute: 42,
+          year: 1992,
+          month: 6,
+          day: 15,
+          hour: 12,
+          minute: 0,
           unknownTime: false,
           place: {
-            name: "Bath, England",
+            name: "Greenwich",
             country: "United Kingdom",
-            latitude: 51.3811,
-            longitude: -2.359,
+            latitude: 51.4779,
+            longitude: -0.0015,
             timezone: "Europe/London",
           },
         }),
@@ -82,11 +82,10 @@ export default function MembersChartsPage() {
       {charts.length === 0 ? (
         <div className="mt-10 max-w-md space-y-4">
           <p className="text-muted-foreground">
-            No wheels yet. Draw one for yourself, a partner, a child — each name
-            keeps its own sky.
+            No charts yet.
           </p>
           <Button variant="outline" onClick={drawSample} disabled={samplePending}>
-            {samplePending ? "Drawing…" : "Draw Eliza’s sample chart"}
+            {samplePending ? "Drawing…" : "Draw a sample chart"}
           </Button>
         </div>
       ) : (

@@ -53,7 +53,7 @@ export function NewsletterForm({
         value={email}
         onChange={(event) => setEmail(event.target.value)}
         placeholder="Your email"
-        aria-label="Email for the studio letters"
+        aria-label="Email for the newsletter"
         className="h-10"
       />
       <Button

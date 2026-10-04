@@ -39,8 +39,7 @@ export default function MembersPage() {
           </p>
           <h1 className="mt-3 font-heading text-4xl">Hello, {member.name}</h1>
           <p className="mt-2 text-muted-foreground">
-            Charts for your people, films of hours already sat, and anything
-            waiting with Eliza.
+            Saved charts, recordings, and reading requests.
           </p>
         </div>
         <Button variant="ghost" onClick={signOut}>
@@ -74,9 +73,9 @@ export default function MembersPage() {
             Requests
           </p>
           <p className="mt-2 font-heading text-3xl">{bookings.length}</p>
-          <p className="text-sm text-muted-foreground">sittings awaiting Eliza</p>
+          <p className="text-sm text-muted-foreground">reading requests</p>
           <div className="mt-4">
-            <BookButton label="Book another hour" />
+            <BookButton label="Book a reading" />
           </div>
         </div>
       </div>

@@ -50,7 +50,7 @@ export function ChartView({ chart }: { chart: NatalChart }) {
       </div>
       <aside className="space-y-6">
         <div className="rounded-2xl border bg-card p-5">
-          <h2 className="font-heading text-2xl">A first look</h2>
+          <h2 className="font-heading text-2xl">Placements</h2>
           <ul className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
             {chart.firstLook.map((line) => (
               <li key={line}>{line}</li>
@@ -124,7 +124,7 @@ export function ChartView({ chart }: { chart: NatalChart }) {
         </div>
         <div className="flex flex-col gap-2">
           <Button className="rounded-full" onClick={() => setBookingOpen(true)}>
-            Sit with Eliza over this chart
+            Book a reading about this chart
           </Button>
           <Button variant="outline" className="rounded-full" asChild>
             <Link href="/members">
@@ -137,10 +137,10 @@ export function ChartView({ chart }: { chart: NatalChart }) {
             className="rounded-full"
             onClick={() => {
               saveChart(chart);
-              toast.success("This wheel is in your library.");
+              toast.success("Chart saved.");
             }}
           >
-            Keep this wheel
+            Save this chart
           </Button>
           <Button
             variant="ghost"

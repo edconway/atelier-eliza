@@ -54,7 +54,7 @@ export function ViewOnAstroCom({
       className={cn("rounded-full", size === "default" && "w-full", className)}
       onClick={openOnAstroCom}
       disabled={pending}
-      title="Opens this birth data on Astro.com. They may ask you to register (free) before showing the wheel."
+      title="Opens this birth data on Astro.com. They may ask you to register (free) before showing the chart."
     >
       {pending ? "Opening Astro.com…" : label}
       <ExternalLink data-icon="inline-end" />
