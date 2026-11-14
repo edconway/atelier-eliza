@@ -70,7 +70,7 @@ export default function HomePage() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="rounded-full px-6"
+                className="rounded-full bg-background px-6 text-foreground hover:bg-background hover:text-foreground"
               >
                 <Link href="/chart/new">Draw a natal chart</Link>
               </Button>
