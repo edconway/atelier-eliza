@@ -23,6 +23,24 @@ const BAND_STARS = [
   [58, 8],
 ];
 
+const quotes = [
+  {
+    text: "I stopped trying to parent the child I had imagined, and started meeting the one in front of me.",
+    name: "A mother",
+    detail: "After a sitting",
+  },
+  {
+    text: "The chart gave us a language for what we were already living with. The fights made more sense, and so did the tenderness.",
+    name: "A father",
+    detail: "Two children",
+  },
+  {
+    text: "I came away less desperate to get it perfect, and clearer about what this particular child needs from me.",
+    name: "A parent",
+    detail: "A first reading",
+  },
+];
+
 const essay = [
   "Let’s face it — we ask a lot of ourselves as ‘conscious parents’. To nourish their childhood as best we can, to do our best, sometimes burnt out and with gritted teeth, to “break the cycle”, to heal our own childhood wounds and climb out of social conditioning in real time whilst juggling mental admin, cooking, everyone’s emotions, physical fights and… oh so much more. We so often feel we’re living in some kind of parallel version of life, a muted, imperfect version, where nothing seems to quite come together the way we feel it should. We see our children struggling in ways that we were led to believe they would not, as long as we followed the conscious parenting advice. Some of us hear siblings saying horrifically cruel things to each other, instilling the traumas we sacrificed years worth of sleep (maybe spent a fortune on therapy) to avoid. Sometimes we even hear such things coming out of our own mouths. And slowly, the list of things we think we can control shrinks. And we do trust in the Mystery. When we don’t feel it, we still say it, as a conclusion to circular discussions about whatever unsolvable situation is currently alive in our family dynamic. And we believe it, we do. But then there’s the biology of being a mother, we do just want everything to be perfect for our babies. Of course we do. So we put it all on ourselves, get more burnt out, keep trying because we care so much. But somehow it feels like we could do better.",
   "And then we take a look at our child’s horoscope. We come face to face with a unique and marvellous Soul on a hero’s journey. We see awesome gigantic heavenly bodies working out fundamental questions of existence through the Being of the small person smearing peanut butter on the kitchen floor. And then it really lands — their path is a new one; the planets will express through them in uncharted ways. And the conflict, as well as the nourishment, we are giving them, are the medium in which they will write a new universe into Consciousness.",
@@ -113,6 +131,26 @@ export default function HomePage() {
               <Link href="/book">Book a reading</Link>
             </Button>
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <h2 className="font-heading text-4xl">From parents</h2>
+        <div className="mt-8 grid gap-6 md:grid-cols-3">
+          {quotes.map((quote) => (
+            <figure
+              key={quote.text}
+              className="flex flex-col rounded-3xl border bg-card p-6"
+            >
+              <blockquote className="font-heading text-2xl leading-snug">
+                “{quote.text}”
+              </blockquote>
+              <figcaption className="mt-6 text-sm text-muted-foreground">
+                <span className="text-foreground">{quote.name}</span>
+                <span className="text-lilac"> · {quote.detail}</span>
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 
