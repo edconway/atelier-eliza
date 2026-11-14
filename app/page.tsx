@@ -24,21 +24,25 @@ const BAND_STARS = [
 ];
 
 const quotes = [
-  {
-    text: "I stopped trying to parent the child I had imagined, and started meeting the one in front of me.",
-    name: "A mother",
-    detail: "After a sitting",
-  },
-  {
-    text: "The chart gave us a language for what we were already living with. The fights made more sense, and so did the tenderness.",
-    name: "A father",
-    detail: "Two children",
-  },
-  {
-    text: "I came away less desperate to get it perfect, and clearer about what this particular child needs from me.",
-    name: "A parent",
-    detail: "A first reading",
-  },
+  [
+    "I have worked with Eliza for both my sons & what she has shared has been so deeply insightful & transformational in how I best support them as our relationships evolve & spiral through our family web. I highly recommend her to any parents who are curious how to thrive within our imprints, interactions & all their many energetic threads & possibilities; & have personally experienced really significant shifts in my capacity to hold & respond to certain situations & dynamics. We’re so grateful, thank you Eliza.",
+  ],
+  [
+    "A week before my astrology reading with Eliza, I I told myself I felt the call to specifically have a tropical astrogeology reading and low and behold without any effort Eliza came through as though the energies heard and connected us seamlessly.",
+    "Eliza's knowledge blew my mind and heart wide open.",
+    "Her tactfulness, her grace and empathy in delivering the information felt like a warm hug.",
+    "The accuracy of what she explained was relatable and perfectly spot on.",
+    "I cried. I laughed. I felt the joy. I felt relief.",
+    "I slept the best have in a very long time post session, I believe that's purely from the wholeness that Eliza delivered through her knowledge, wisdom and ability to connect things so precisely.",
+    "What Eliza creates in a session is one of a kind. She connected my chart with my son's and spoke of how I can support him, where we may have struggles, how we can overcome those, where and how we can support one another - it was spectacular and left me feeling like I am not alone, that I am held and that it is all for us. Eliza felt like the hand rail I had been searching for in the dark, well the lights are on now and I can see and I have the tools to get through anything.",
+    "I think I speak, not only, for myself but the majority of mothers when I say that we feel like a failure at times and what I came to realise through Eliza's work is that I am in dance with my son, sometimes we will trip up, step on each others feet, and those aren't failures they are lessons to be learnt , bringing us closer despite the discomfort.",
+    "Astrology is the map and Eliza is the guide on the best routes to take. We individually decide the steps we take.",
+    "Thank you Eliza from the very bottom of my soul 🙏🏽",
+  ],
+  [
+    "The insights I gained from Eliza’s session gave me a perspective into my daughter’s world I hadn’t yet considered, and consequently had an immediate positive effect on my ability to parent with compassionate understanding.",
+    "It was invaluable and I highly recommend her!",
+  ],
 ];
 
 const readings = [
@@ -162,19 +166,17 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <h2 className="font-heading text-4xl">From parents</h2>
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {quotes.map((quote) => (
+        <div className="mt-8 grid gap-6">
+          {quotes.map((paragraphs) => (
             <figure
-              key={quote.text}
-              className="flex flex-col rounded-3xl border bg-card p-6"
+              key={paragraphs[0]}
+              className="rounded-3xl border bg-card p-6"
             >
-              <blockquote className="font-heading text-2xl leading-snug">
-                “{quote.text}”
+              <blockquote className="space-y-4 text-base leading-[1.75] text-foreground/85">
+                {paragraphs.map((paragraph) => (
+                  <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                ))}
               </blockquote>
-              <figcaption className="mt-6 text-sm text-muted-foreground">
-                <span className="text-foreground">{quote.name}</span>
-                <span className="text-lilac"> · {quote.detail}</span>
-              </figcaption>
             </figure>
           ))}
         </div>
