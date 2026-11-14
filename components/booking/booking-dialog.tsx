@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useAtelier } from "@/lib/atelier-store";
 import { sittings } from "@/lib/sittings";
-import type { SessionType } from "@/lib/types";
+import type { NatalChart, Place, SessionType } from "@/lib/types";
 
 const types = sittings.map((sitting) => ({
   value: sitting.value,
@@ -23,6 +23,238 @@ const types = sittings.map((sitting) => ({
 }));
 
 type Slot = { id: string; start: string; end: string };
+
+type BirthDraft = {
+  source: "saved" | "new";
+  chartId: string;
+  personName: string;
+  date: string;
+  hour: string;
+  minute: string;
+  unknownTime: boolean;
+  query: string;
+  place: Place | null;
+};
+
+function emptyBirth(chartId = ""): BirthDraft {
+  return {
+    source: chartId ? "saved" : "new",
+    chartId,
+    personName: "",
+    date: "",
+    hour: "12",
+    minute: "00",
+    unknownTime: false,
+    query: "",
+    place: null,
+  };
+}
+
+function birthPayload(draft: BirthDraft, charts: NatalChart[]) {
+  if (draft.source === "saved") {
+    const chart = charts.find((item) => item.id === draft.chartId);
+    if (!chart) return null;
+    const input = chart.input;
+    return {
+      name: input.name,
+      year: input.year,
+      month: input.month,
+      day: input.day,
+      hour: input.hour,
+      minute: input.minute,
+      unknownTime: input.unknownTime,
+      placeName: input.place.name,
+      latitude: input.place.latitude,
+      longitude: input.place.longitude,
+    };
+  }
+  const [year, month, day] = draft.date.split("-").map(Number);
+  if (!draft.place) return null;
+  return {
+    name: draft.personName.trim(),
+    year,
+    month,
+    day,
+    hour: Number(draft.hour),
+    minute: Number(draft.minute),
+    unknownTime: draft.unknownTime,
+    placeName: draft.place.name,
+    latitude: draft.place.latitude,
+    longitude: draft.place.longitude,
+  };
+}
+
+function BirthFields({
+  idPrefix,
+  label,
+  charts,
+  draft,
+  onChange,
+}: {
+  idPrefix: string;
+  label: string;
+  charts: NatalChart[];
+  draft: BirthDraft;
+  onChange: (next: BirthDraft) => void;
+}) {
+  const [places, setPlaces] = useState<Place[]>([]);
+
+  useEffect(() => {
+    if (draft.source !== "new" || draft.place || draft.query.trim().length < 2) {
+      return;
+    }
+    const handle = window.setTimeout(async () => {
+      try {
+        const response = await fetch(
+          `/api/places?q=${encodeURIComponent(draft.query.trim())}`,
+        );
+        const data = (await response.json()) as { places?: Place[] };
+        setPlaces(data.places ?? []);
+      } catch {
+        setPlaces([]);
+      }
+    }, 280);
+    return () => window.clearTimeout(handle);
+  }, [draft.place, draft.query, draft.source]);
+
+  return (
+    <fieldset className="space-y-3 rounded-2xl border p-3">
+      <legend className="px-1 text-sm font-medium">{label}</legend>
+      {charts.length > 0 ? (
+        <div className="flex gap-3 text-sm">
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              name={`${idPrefix}-source`}
+              checked={draft.source === "saved"}
+              onChange={() =>
+                onChange({
+                  ...draft,
+                  source: "saved",
+                  chartId: draft.chartId || charts[0]?.id || "",
+                })
+              }
+            />
+            Saved profile
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              name={`${idPrefix}-source`}
+              checked={draft.source === "new"}
+              onChange={() => onChange({ ...draft, source: "new" })}
+            />
+            Enter birth details
+          </label>
+        </div>
+      ) : null}
+      {draft.source === "saved" && charts.length > 0 ? (
+        <select
+          required
+          value={draft.chartId}
+          onChange={(event) => onChange({ ...draft, chartId: event.target.value })}
+          className="h-9 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          {charts.map((chart) => (
+            <option key={chart.id} value={chart.id}>
+              {chart.input.name}, {chart.input.day}/{chart.input.month}/{chart.input.year}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <Label htmlFor={`${idPrefix}-person`}>Name on the chart</Label>
+            <Input
+              id={`${idPrefix}-person`}
+              required
+              value={draft.personName}
+              onChange={(event) =>
+                onChange({ ...draft, personName: event.target.value })
+              }
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor={`${idPrefix}-date`}>Date of birth</Label>
+            <Input
+              id={`${idPrefix}-date`}
+              type="date"
+              required
+              value={draft.date}
+              onChange={(event) => onChange({ ...draft, date: event.target.value })}
+            />
+          </div>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={draft.unknownTime}
+              onChange={(event) =>
+                onChange({ ...draft, unknownTime: event.target.checked })
+              }
+            />
+            Birth time unknown
+          </label>
+          {!draft.unknownTime ? (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor={`${idPrefix}-hour`}>Hour (0–23)</Label>
+                <Input
+                  id={`${idPrefix}-hour`}
+                  inputMode="numeric"
+                  required
+                  value={draft.hour}
+                  onChange={(event) => onChange({ ...draft, hour: event.target.value })}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor={`${idPrefix}-minute`}>Minute</Label>
+                <Input
+                  id={`${idPrefix}-minute`}
+                  inputMode="numeric"
+                  required
+                  value={draft.minute}
+                  onChange={(event) =>
+                    onChange({ ...draft, minute: event.target.value })
+                  }
+                />
+              </div>
+            </div>
+          ) : null}
+          <div className="space-y-1.5">
+            <Label htmlFor={`${idPrefix}-place`}>Place of birth</Label>
+            <Input
+              id={`${idPrefix}-place`}
+              required={!draft.place}
+              value={draft.place?.name ?? draft.query}
+              placeholder="City or town"
+              onChange={(event) =>
+                onChange({ ...draft, query: event.target.value, place: null })
+              }
+            />
+            {draft.place ? (
+              <p className="text-xs text-muted-foreground">{draft.place.name}</p>
+            ) : null}
+            {!draft.place && places.length > 0 ? (
+              <ul className="overflow-hidden rounded-lg border">
+                {places.slice(0, 5).map((place) => (
+                  <li key={`${place.name}-${place.latitude}`}>
+                    <button
+                      type="button"
+                      className="w-full px-3 py-2 text-left text-sm hover:bg-muted"
+                      onClick={() => onChange({ ...draft, place, query: place.name })}
+                    >
+                      {place.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        </div>
+      )}
+    </fieldset>
+  );
+}
 
 function formatSlot(slot: Slot) {
   const start = new Date(slot.start);
@@ -42,7 +274,7 @@ function formatSlot(slot: Slot) {
 }
 
 export function BookingForm({ onDone }: { onDone?: () => void }) {
-  const { member } = useAtelier();
+  const { member, charts } = useAtelier();
   const [slots, setSlots] = useState<Slot[]>([]);
   const [unavailable, setUnavailable] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -51,6 +283,8 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
   const [email, setEmail] = useState(member?.email ?? "");
   const [sessionType, setSessionType] = useState<SessionType>("child");
   const [notes, setNotes] = useState("");
+  const [birth, setBirth] = useState<BirthDraft>(() => emptyBirth());
+  const [otherBirth, setOtherBirth] = useState<BirthDraft>(() => emptyBirth());
   const [pending, setPending] = useState(false);
   const [booked, setBooked] = useState<string | null>(null);
 
@@ -78,14 +312,40 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
     };
   }, []);
 
+  useEffect(() => {
+    const first = charts[0];
+    if (!first) return;
+    setBirth((current) =>
+      current.chartId ? current : { ...current, source: "saved", chartId: first.id },
+    );
+    setOtherBirth((current) =>
+      current.chartId ? current : { ...current, source: "saved", chartId: first.id },
+    );
+  }, [charts]);
+
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
+    const chart = birthPayload(birth, charts);
+    const other =
+      sessionType === "child-with-other" ? birthPayload(otherBirth, charts) : undefined;
+    if (!chart || (sessionType === "child-with-other" && !other)) {
+      toast.error("Add the birth details, including a place from the list.");
+      return;
+    }
     setPending(true);
     try {
       const response = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId, name, email, sessionType, notes }),
+        body: JSON.stringify({
+          eventId,
+          name,
+          email,
+          sessionType,
+          notes,
+          birth: chart,
+          otherBirth: other,
+        }),
       });
       const body = (await response.json()) as { error?: string };
       if (!response.ok) {
@@ -189,6 +449,22 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
           ))}
         </select>
       </div>
+      <BirthFields
+        idPrefix="bk-birth"
+        label="Birth details"
+        charts={charts}
+        draft={birth}
+        onChange={setBirth}
+      />
+      {sessionType === "child-with-other" ? (
+        <BirthFields
+          idPrefix="bk-other"
+          label="The other person’s birth details"
+          charts={charts}
+          draft={otherBirth}
+          onChange={setOtherBirth}
+        />
+      ) : null}
       <div className="space-y-1.5">
         <Label htmlFor="bk-notes">Notes</Label>
         <Textarea
@@ -211,7 +487,7 @@ export function BookingDialog() {
 
   return (
     <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="max-h-[min(40rem,90vh)] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="font-heading text-2xl">Book</DialogTitle>
           <DialogDescription>Choose an open time.</DialogDescription>

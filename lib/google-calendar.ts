@@ -166,6 +166,7 @@ export async function bookSlot(input: {
   email: string;
   reading: string;
   notes?: string;
+  births?: string[];
 }) {
   const current = await calendarFetch(
     `/events/${encodeURIComponent(input.eventId)}`,
@@ -184,6 +185,7 @@ export async function bookSlot(input: {
   const description = [
     `Email: ${input.email}`,
     `Reading: ${input.reading}`,
+    ...(input.births ?? []),
     input.notes?.trim() ? `Notes: ${input.notes.trim()}` : "",
   ]
     .filter(Boolean)
