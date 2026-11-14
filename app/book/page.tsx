@@ -22,7 +22,7 @@ export default function BookPage() {
         ))}
       </div>
       <div className="mx-auto mt-16 max-w-lg rounded-3xl border bg-card p-6 sm:p-8">
-        <h2 className="font-heading text-3xl">Request a time</h2>
+        <h2 className="font-heading text-3xl">Choose a time</h2>
         <div className="mt-8">
           <BookingForm />
         </div>

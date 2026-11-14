@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,49 +22,136 @@ const types = sittings.map((sitting) => ({
   label: sitting.title,
 }));
 
+type Slot = { id: string; start: string; end: string };
+
+function formatSlot(slot: Slot) {
+  const start = new Date(slot.start);
+  const end = new Date(slot.end);
+  const day = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  }).format(start);
+  const time = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `${day}, ${time.format(start)}–${time.format(end)}`;
+}
+
 export function BookingForm({ onDone }: { onDone?: () => void }) {
-  const { charts, member, addBooking } = useAtelier();
+  const { member } = useAtelier();
+  const [slots, setSlots] = useState<Slot[]>([]);
+  const [unavailable, setUnavailable] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [eventId, setEventId] = useState("");
   const [name, setName] = useState(member?.name ?? "");
   const [email, setEmail] = useState(member?.email ?? "");
   const [sessionType, setSessionType] = useState<SessionType>("child");
-  const [preferredDate, setPreferredDate] = useState("");
-  const [chartId, setChartId] = useState("none");
   const [notes, setNotes] = useState("");
-  const [sent, setSent] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [booked, setBooked] = useState<string | null>(null);
 
-  const chartOptions = useMemo(
-    () => charts.map((chart) => ({ id: chart.id, name: chart.input.name })),
-    [charts],
-  );
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/bookings")
+      .then(async (response) => {
+        const body = (await response.json()) as {
+          slots?: Slot[];
+          unavailable?: boolean;
+        };
+        if (cancelled) return;
+        setUnavailable(!response.ok || Boolean(body.unavailable));
+        setSlots(body.slots ?? []);
+        setEventId(body.slots?.[0]?.id ?? "");
+      })
+      .catch(() => {
+        if (!cancelled) setUnavailable(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  function onSubmit(event: React.FormEvent) {
+  async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
-    addBooking({
-      name,
-      email,
-      sessionType,
-      preferredDate,
-      chartId: chartId === "none" ? undefined : chartId,
-      notes,
-    });
-    setSent(true);
-    toast.success("Request received.");
+    setPending(true);
+    try {
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, name, email, sessionType, notes }),
+      });
+      const body = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        toast.error(body.error ?? "That time could not be booked.");
+        if (response.status === 409) {
+          setSlots((current) => current.filter((slot) => slot.id !== eventId));
+          setEventId("");
+        }
+        return;
+      }
+      const chosen = slots.find((slot) => slot.id === eventId);
+      setBooked(chosen ? formatSlot(chosen) : "that time");
+      toast.success("Booked.");
+    } catch {
+      toast.error("That time could not be booked.");
+    } finally {
+      setPending(false);
+    }
   }
 
-  if (sent) {
+  if (loading) {
+    return <p className="text-sm text-muted-foreground">Looking for open times…</p>;
+  }
+
+  if (unavailable) {
+    return (
+      <p className="text-sm text-muted-foreground">Slots are unavailable.</p>
+    );
+  }
+
+  if (booked) {
     return (
       <div className="space-y-3">
-        <h2 className="font-heading text-2xl">Request saved</h2>
+        <h2 className="font-heading text-2xl">You’re booked</h2>
         <p className="text-sm text-muted-foreground">
-          Your request is saved with your charts.
+          {booked} is held for you. Eliza has it on her calendar.
         </p>
         {onDone ? <Button onClick={onDone}>Close</Button> : null}
       </div>
     );
   }
 
+  if (slots.length === 0) {
+    return (
+      <p className="text-sm text-muted-foreground">No open times right now.</p>
+    );
+  }
+
   return (
     <form onSubmit={onSubmit} className="space-y-4">
+      <fieldset className="space-y-2">
+        <legend className="text-sm font-medium">Open times</legend>
+        {slots.map((slot) => (
+          <label key={slot.id} className="flex items-center gap-2 text-sm">
+            <input
+              type="radio"
+              name="slot"
+              value={slot.id}
+              checked={eventId === slot.id}
+              onChange={() => setEventId(slot.id)}
+              required
+            />
+            {formatSlot(slot)}
+          </label>
+        ))}
+      </fieldset>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="bk-name">Name</Label>
@@ -86,48 +173,18 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
           />
         </div>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label htmlFor="bk-sitting">Reading</Label>
-          <select
-            id="bk-sitting"
-            required
-            value={sessionType}
-            onChange={(event) =>
-              setSessionType(event.target.value as SessionType)
-            }
-            className="h-9 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
-            {types.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="bk-date">Preferred date</Label>
-          <Input
-            id="bk-date"
-            type="date"
-            required
-            value={preferredDate}
-            onChange={(event) => setPreferredDate(event.target.value)}
-          />
-        </div>
-      </div>
       <div className="space-y-1.5">
-        <Label htmlFor="bk-chart">Chart to discuss</Label>
+        <Label htmlFor="bk-reading">Reading</Label>
         <select
-          id="bk-chart"
-          value={chartId}
-          onChange={(event) => setChartId(event.target.value)}
+          id="bk-reading"
+          required
+          value={sessionType}
+          onChange={(event) => setSessionType(event.target.value as SessionType)}
           className="h-9 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         >
-          <option value="none">No saved chart</option>
-          {chartOptions.map((chart) => (
-            <option key={chart.id} value={chart.id}>
-              {chart.name}
+          {types.map((type) => (
+            <option key={type.value} value={type.value}>
+              {type.label}
             </option>
           ))}
         </select>
@@ -142,8 +199,8 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
           placeholder="Optional."
         />
       </div>
-      <Button type="submit" className="w-full">
-        Send request
+      <Button type="submit" className="w-full" disabled={pending || !eventId}>
+        {pending ? "Booking…" : "Book"}
       </Button>
     </form>
   );
@@ -156,10 +213,8 @@ export function BookingDialog() {
     <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="font-heading text-2xl">
-            Book
-          </DialogTitle>
-          <DialogDescription>Request a reading.</DialogDescription>
+          <DialogTitle className="font-heading text-2xl">Book</DialogTitle>
+          <DialogDescription>Choose an open time.</DialogDescription>
         </DialogHeader>
         <BookingForm onDone={() => setBookingOpen(false)} />
       </DialogContent>

@@ -5,7 +5,7 @@ A site for Eliza: natal charts for children, bookings, a library of saved charts
 ## What you can do
 
 - **Draw a natal chart** in four steps (who, when, where, confirm). The wheel is interactive — hover or tap a planet for sign, house, and aspects.
-- **Book a sitting** with Eliza from the header, a chart, or `/book`.
+- **Book** an open time from the header, a chart, or `/book`. Eliza keeps those openings on a Google Calendar she edits.
 - **Members library** — saved charts (yourself, partner, child, …), session films, and sitting requests.
 - **Journal + studio list** — essays and a newsletter signup (stored locally until a real mailer is connected).
 - **AAF interchange** — paste Astro.com exports; download the library for other software.
@@ -57,7 +57,12 @@ Open [http://localhost:4327](http://localhost:4327).
 5. Connect **Cal.com** + **Stripe** when Eliza’s calendar should take payment.
 6. Send the studio letters with **Resend**.
 
-Until then, membership, charts, bookings, and newsletter signups persist in the browser (`localStorage`) so the site works without secrets.
+Until then, membership, charts, and newsletter signups persist in the browser (`localStorage`). Bookings do not: they write to Eliza’s Google Calendar, and the Book page says slots are unavailable until these environment variables are set.
+
+- `GOOGLE_CALENDAR_ID` — the calendar Eliza edits.
+- `GOOGLE_SERVICE_ACCOUNT_JSON` — the service-account key JSON. Share that calendar with the service account’s `client_email` so it can change events.
+
+Eliza creates one event per opening. A summary of `Open` (any case), or an event with no attendees, is a bookable slot. A booking renames the event to the reading and the visitor’s name, and adds their email.
 
 ## Stack
 
