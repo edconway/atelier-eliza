@@ -8,7 +8,7 @@ export function SiteFooter() {
         <div>
           <p className="font-heading text-3xl">Newsletter</p>
           <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Occasional emails about sittings and new posts. Not a daily
+            Occasional emails about readings and new posts. Not a daily
             horoscope.
           </p>
           <div className="mt-5 max-w-md">
@@ -20,8 +20,8 @@ export function SiteFooter() {
             <Link href="/about" className="hover:text-rose">
               Eliza
             </Link>
-            <Link href="/consultations" className="hover:text-rose">
-              Sittings
+            <Link href="/book" className="hover:text-rose">
+              Book
             </Link>
             <Link href="/journal" className="hover:text-rose">
               Journal

@@ -88,7 +88,7 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
-          <Label htmlFor="bk-sitting">Sitting</Label>
+          <Label htmlFor="bk-sitting">Reading</Label>
           <select
             id="bk-sitting"
             required
@@ -157,7 +157,7 @@ export function BookingDialog() {
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="font-heading text-2xl">
-            Book a sitting
+            Book
           </DialogTitle>
           <DialogDescription>Request a reading.</DialogDescription>
         </DialogHeader>

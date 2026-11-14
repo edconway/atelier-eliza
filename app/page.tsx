@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { currentSky, moonViewSky } from "@/lib/sky";
 import { Button } from "@/components/ui/button";
-import { journalPosts } from "@/lib/journal";
 import { MoonVeil } from "@/components/site/moon-veil";
 
 export const dynamic = "force-dynamic";
@@ -64,7 +63,7 @@ const readings = [
     ],
   },
   {
-    title: "Adult reading",
+    title: "For you",
     paragraphs: [
       "Would you like to explore your own hero’s journey? It’s always helpful to be reminded of the plan. Let’s explore the unique and magical energies that you bring to the world. Acknowledge your gifts and challenges.  The planets live and breathe uniquely through you; in your own unique tones. You are truly a cosmic work of art!  We will tune into the powerful energies woven through your life, and pay attention to whatever cycles are currently or imminently active.",
     ],
@@ -74,7 +73,6 @@ const readings = [
 export default function HomePage() {
   const sky = currentSky();
   const view = moonViewSky(sky.elongation);
-  const letters = journalPosts.slice(0, 3);
   const lit = Math.round(sky.illumination * 100);
 
   return (
@@ -105,7 +103,7 @@ export default function HomePage() {
             </h1>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" className="rounded-full px-6">
-                <Link href="/book">Readings you can book</Link>
+                <Link href="/book">Book</Link>
               </Button>
               <Button
                 asChild
@@ -154,13 +152,13 @@ export default function HomePage() {
                   <p key={paragraph.slice(0, 48)}>{paragraph}</p>
                 ))}
               </div>
+              <div>
+                <Button asChild className="rounded-full px-6">
+                  <Link href="/book">Book</Link>
+                </Button>
+              </div>
             </div>
           ))}
-          <div>
-            <Button asChild className="rounded-full px-6">
-              <Link href="/book">Book a reading</Link>
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -182,29 +180,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <div className="flex items-end justify-between gap-4">
-          <h2 className="font-heading text-4xl">Journal</h2>
-          <Link href="/journal" className="text-sm text-rose hover:underline">
-            All posts
-          </Link>
-        </div>
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {letters.map((post) => (
-            <Link
-              key={post.slug}
-              href={`/journal/${post.slug}`}
-              className="rounded-3xl border bg-card p-6 transition hover:border-rose/50"
-            >
-              <p className="text-[0.7rem] uppercase tracking-[0.22em] text-lilac">
-                {post.topic}
-              </p>
-              <h3 className="mt-3 font-heading text-2xl">{post.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{post.excerpt}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

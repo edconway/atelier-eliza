@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/about", label: "Eliza" },
-  { href: "/consultations", label: "Sittings" },
   { href: "/chart/new", label: "Draw a chart" },
   { href: "/journal", label: "Journal" },
   { href: "/members", label: "Library" },
@@ -50,7 +49,7 @@ export function SiteHeader() {
             </Link>
           </Button>
           <Button size="sm" className="rounded-full px-4" onClick={() => setBookingOpen(true)}>
-            Book a sitting
+            Book
           </Button>
         </div>
         <Sheet open={open} onOpenChange={setOpen}>
@@ -79,7 +78,7 @@ export function SiteHeader() {
                   setBookingOpen(true);
                 }}
               >
-                Book a sitting
+                Book
               </Button>
             </nav>
           </SheetContent>
