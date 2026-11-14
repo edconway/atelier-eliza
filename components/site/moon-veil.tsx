@@ -32,13 +32,18 @@ export function MoonVeil({ elongation }: { elongation: number }) {
   return (
     <svg
       viewBox="0 0 200 200"
-      className="mx-auto aspect-square h-auto w-full max-w-sm"
+      className="mx-auto aspect-square h-auto w-28 sm:w-36"
       role="img"
       aria-label="The Moon at its current phase"
     >
       <defs>
         <filter id="moon-gray">
           <feColorMatrix type="saturate" values="0" />
+          <feComponentTransfer>
+            <feFuncR type="linear" slope="0.28" intercept="0.78" />
+            <feFuncG type="linear" slope="0.28" intercept="0.78" />
+            <feFuncB type="linear" slope="0.28" intercept="0.78" />
+          </feComponentTransfer>
         </filter>
         <filter id="moon-edge" x="-8%" y="-8%" width="116%" height="116%">
           <feGaussianBlur stdDeviation="0.7" />
@@ -53,13 +58,13 @@ export function MoonVeil({ elongation }: { elongation: number }) {
           x2={lightFromRight ? "42%" : "58%"}
           y2="0%"
         >
-          <stop offset="0%" stopColor="#000" stopOpacity="0" />
-          <stop offset="70%" stopColor="#000" stopOpacity="0.08" />
-          <stop offset="100%" stopColor="#000" stopOpacity="0.55" />
+          <stop offset="0%" stopColor="#fff" stopOpacity="0.35" />
+          <stop offset="78%" stopColor="#fff" stopOpacity="0.12" />
+          <stop offset="100%" stopColor="#000" stopOpacity="0.08" />
         </linearGradient>
         <radialGradient id="moon-limb" cx="50%" cy="50%" r="50%">
-          <stop offset="72%" stopColor="#000" stopOpacity="0" />
-          <stop offset="100%" stopColor="#000" stopOpacity="0.45" />
+          <stop offset="70%" stopColor="#fff" stopOpacity="0" />
+          <stop offset="100%" stopColor="#fff" stopOpacity="0.55" />
         </radialGradient>
         <mask id="moon-lit" maskUnits="userSpaceOnUse">
           <rect width="200" height="200" fill="black" />
@@ -74,7 +79,7 @@ export function MoonVeil({ elongation }: { elongation: number }) {
       </defs>
 
       {!isNew && (
-        <g clipPath="url(#moon-disc)" mask="url(#moon-lit)">
+        <g clipPath="url(#moon-disc)" mask="url(#moon-lit)" opacity="0.72">
           <image
             href="/moon.jpg"
             x={CX - R * 1.08}

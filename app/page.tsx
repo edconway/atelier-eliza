@@ -115,7 +115,7 @@ export default function HomePage() {
               </Button>
             </div>
           </div>
-          <figure className="mx-auto w-full max-w-sm text-center">
+          <figure className="mx-auto w-full max-w-[9rem] text-center sm:max-w-[11rem]">
             <MoonVeil elongation={sky.elongation} />
             <figcaption className="mt-2">
               <p className="font-heading text-3xl">{sky.phase} Moon</p>
