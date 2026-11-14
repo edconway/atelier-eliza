@@ -41,11 +41,30 @@ const quotes = [
   },
 ];
 
-const essay = [
-  "Let’s face it — we ask a lot of ourselves as ‘conscious parents’. To nourish their childhood as best we can, to do our best, sometimes burnt out and with gritted teeth, to “break the cycle”, to heal our own childhood wounds and climb out of social conditioning in real time whilst juggling mental admin, cooking, everyone’s emotions, physical fights and… oh so much more. We so often feel we’re living in some kind of parallel version of life, a muted, imperfect version, where nothing seems to quite come together the way we feel it should. We see our children struggling in ways that we were led to believe they would not, as long as we followed the conscious parenting advice. Some of us hear siblings saying horrifically cruel things to each other, instilling the traumas we sacrificed years worth of sleep (maybe spent a fortune on therapy) to avoid. Sometimes we even hear such things coming out of our own mouths. And slowly, the list of things we think we can control shrinks. And we do trust in the Mystery. When we don’t feel it, we still say it, as a conclusion to circular discussions about whatever unsolvable situation is currently alive in our family dynamic. And we believe it, we do. But then there’s the biology of being a mother, we do just want everything to be perfect for our babies. Of course we do. So we put it all on ourselves, get more burnt out, keep trying because we care so much. But somehow it feels like we could do better.",
-  "And then we take a look at our child’s horoscope. We come face to face with a unique and marvellous Soul on a hero’s journey. We see awesome gigantic heavenly bodies working out fundamental questions of existence through the Being of the small person smearing peanut butter on the kitchen floor. And then it really lands — their path is a new one; the planets will express through them in uncharted ways. And the conflict, as well as the nourishment, we are giving them, are the medium in which they will write a new universe into Consciousness.",
-  "So while we can’t make everything perfect for them, we can nourish them more effectively by understanding what they, specifically, need to feel nurtured, beyond what the parenting psychology says. We can see from the birth chart how our children might be wired to perceive us as parents. It is very likely not to be how we perceive ourselves. But when we see what they have come to us for, we can work to make sure we give them the highest possible expression of that quality.",
-  "By having a sense of what they are grappling with this lifetime, it’s so much easier to have allowance for their journey. Our children can feel when we honour them and they blossom. And we can give ourselves a break, and really, truly relax into the role they have given us.",
+const readings = [
+  {
+    title: "Natal chart readings for parents",
+    paragraphs: [
+      "Why look at your child’s chart?",
+      "Because being a parent is hard. Often under rested and overwhelmed, we ask ourselves to nurture and nourish our children on all levels, day and night, for years. Breaking family wound patterns in real time, unhooking from social conditioning, and handling all the grown up stuff at the same time.  The pressure to be perfect is constant.  Seeing our children struggling in ways that the logic of trauma-informed parenting promised they would not. Trying to absorb all the pain and blame ourselves so they can be free, and then watching them traumatise each other anyway. And then losing our shit and making it worse. The list of what I think I can control is shrinking all the time.",
+      "But when we take a look at our child’s horoscope, we get some space. We realise not all of our child’s struggles are necessarily a reflection of our own failures. We understand that our urge to protect our children and perfect the world for them is as pointless as trying to rearrange the stars.",
+      "The child is a sovereign soul on their own unique and novel hero’s journey, using the dynamics of their childhood to write a new universe into Consiousness.",
+      "In a reading, we learn what truly makes our child feel loved. How her mind works, and how to support it. Where the inner conflict might be, and how to hold her through it.  How she is wired to perceive her parents, and how to hold the higher octave of this quality.  The day to day of parenting becomes lighter when we can focus our efforts on what really matters, instead of striving for all-round perfection.",
+      "Even if nothing surprises you, there is a softening that comes with having it confirmed, objectively, in a reading. It’s easier to have allowance for their journey when we see the depth of what they are grappling with. And our children really blossom when they feel we honour them truly in their uniqueness.",
+    ],
+  },
+  {
+    title: "Synastry reading",
+    paragraphs: [
+      "All of the above, but with the added benefit of precise insights on how the child’s chart interacts with somebody else’s (eg parent or sibling). We understand, cognitively and experientially,  that our children are here to teach us.  As Ram Das said, “we are all just walking each other home”.  Nowhere is it clearer to see than in the synastry chart of two people whose lives are deeply interwoven. It’s particularly magical seeing how deliberate and magical this relationship is between a child and their parent or sibling.  Seeing the dynamics of the relationship mapped out on the chart opens the heart irreversibly and gives strength and devotion for the journey, demanding as it can be.",
+    ],
+  },
+  {
+    title: "Adult reading",
+    paragraphs: [
+      "Would you like to explore your own hero’s journey? It’s always helpful to be reminded of the plan. Let’s explore the unique and magical energies that you bring to the world. Acknowledge your gifts and challenges.  The planets live and breathe uniquely through you; in your own unique tones. You are truly a cosmic work of art!  We will tune into the powerful energies woven through your life, and pay attention to whatever cycles are currently or imminently active.",
+    ],
+  },
 ];
 
 export default function HomePage() {
@@ -122,11 +141,18 @@ export default function HomePage() {
       </section>
 
       <section className="border-y bg-card/70">
-        <div className="mx-auto max-w-3xl space-y-6 px-4 py-16 text-base leading-[1.75] text-foreground/85 sm:px-6 sm:text-lg">
-          {essay.map((paragraph) => (
-            <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+        <div className="mx-auto max-w-3xl space-y-12 px-4 py-16 sm:px-6">
+          {readings.map((reading) => (
+            <div key={reading.title} className="space-y-6">
+              <h2 className="font-heading text-4xl">{reading.title}</h2>
+              <div className="space-y-6 text-base leading-[1.75] text-foreground/85 sm:text-lg">
+                {reading.paragraphs.map((paragraph) => (
+                  <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
           ))}
-          <div className="pt-2">
+          <div>
             <Button asChild className="rounded-full px-6">
               <Link href="/book">Book a reading</Link>
             </Button>
