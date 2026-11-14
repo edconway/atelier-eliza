@@ -4,6 +4,7 @@ export const sittings: {
   value: SessionType;
   title: string;
   time: string;
+  minutes: number;
   price: string;
   body: string;
 }[] = [
@@ -11,6 +12,7 @@ export const sittings: {
     value: "child",
     title: "One child, one hour",
     time: "60 minutes",
+    minutes: 60,
     price: "£120",
     body: "One child’s chart. One hour.",
   },
@@ -18,6 +20,7 @@ export const sittings: {
     value: "child-with-other",
     title: "One child, with one other person",
     time: "75 minutes",
+    minutes: 75,
     price: "£150",
     body: "One child as the main focus, with one other person — child or adult — included to see how their planets interact with that child. A bit more expensive.",
   },
@@ -25,6 +28,7 @@ export const sittings: {
     value: "adult",
     title: "Your own hero’s journey",
     time: "75 minutes",
+    minutes: 75,
     price: "£140",
     body: "One adult, 75 minutes. Then a reduced rate for the child.",
   },

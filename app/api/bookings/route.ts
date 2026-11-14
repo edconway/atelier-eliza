@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
+import { sendBookingEmails } from "@/lib/booking-mail";
 import {
   bookSlot,
   CalendarUnavailable,
-  listOpenSlots,
+  listAppointmentSlots,
 } from "@/lib/google-calendar";
 import { sittings } from "@/lib/sittings";
 
@@ -67,9 +68,13 @@ function birthLine(label: string, birth: BirthBody | undefined) {
   return `${label}: ${name}, born ${pretty}, ${time}, in ${placeName} (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const minutes = Number(new URL(request.url).searchParams.get("minutes"));
+  const allowed = sittings.some((sitting) => sitting.minutes === minutes)
+    ? minutes
+    : sittings[0].minutes;
   try {
-    const slots = await listOpenSlots();
+    const slots = await listAppointmentSlots(allowed);
     return NextResponse.json({ slots });
   } catch (error) {
     const message =
@@ -84,6 +89,7 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as {
       eventId?: string;
+      start?: string;
       name?: string;
       email?: string;
       sessionType?: string;
@@ -115,17 +121,40 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
-    const result = await bookSlot({
+    const slotStart = body.start ? new Date(body.start) : null;
+    if (!slotStart || Number.isNaN(slotStart.getTime())) {
+      return NextResponse.json(
+        { error: "Choose a time within an opening." },
+        { status: 400 },
+      );
+    }
+    await bookSlot({
       eventId: body.eventId,
+      start: slotStart.toISOString(),
+      minutes: reading.minutes,
       name,
       email,
       reading: reading.title,
       notes: body.notes,
       births: [birth, otherBirth].filter((line): line is string => Boolean(line)),
     });
+    const when = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/London",
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(slotStart);
+    const emailed = await sendBookingEmails({
+      to: email,
+      when: `${when} UK time`,
+      reading: reading.title,
+      name,
+    });
     return NextResponse.json({
       ok: true,
-      emailed: result.emailed,
+      emailed,
       reading: reading.title,
     });
   } catch (error) {

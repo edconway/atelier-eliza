@@ -62,7 +62,13 @@ Until then, membership, charts, and newsletter signups persist in the browser (`
 - `GOOGLE_CALENDAR_ID` — the calendar Eliza edits.
 - `GOOGLE_SERVICE_ACCOUNT_JSON` — the service-account key JSON. Share that calendar with the service account’s `client_email` so it can change events.
 
-Eliza creates one event per opening. A summary of `Open` (any case), or an event with no attendees, is a bookable slot. A booking renames the event to the reading and the visitor’s name, and adds their email.
+Eliza creates one timed event per opening, titled `Open`. The site offers start times inside that opening, every 30 minutes, for the length of the reading. A request adds a separate tentative event and leaves the rest of the opening free. Eliza accepts by leaving that event, or declines by deleting it.
+
+Confirmation email is sent only when these are also set:
+
+- `RESEND_API_KEY`
+- `BOOKING_FROM_EMAIL` — a sender Resend has verified
+- `BOOKING_NOTIFY_EMAIL` — optional address that receives a copy of each request
 
 ## Stack
 

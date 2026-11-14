@@ -121,14 +121,6 @@ function isOpen(event: CalendarEvent) {
   return summary === "open" || attendees.length === 0;
 }
 
-function slotFrom(event: CalendarEvent): OpenSlot | null {
-  const start = event.start?.dateTime;
-  const end = event.end?.dateTime;
-  if (!event.id || !start || !end) return null;
-  if (new Date(start).getTime() <= Date.now()) return null;
-  return { id: event.id, start, end };
-}
-
 async function calendarFetch(path: string, init?: RequestInit) {
   const token = await accessToken();
   const response = await fetch(
@@ -144,43 +136,95 @@ async function calendarFetch(path: string, init?: RequestInit) {
   return response;
 }
 
-export async function listOpenSlots(): Promise<OpenSlot[]> {
+const STEP_MS = 30 * 60 * 1000;
+
+async function listUpcomingEvents() {
   const params = new URLSearchParams({
     singleEvents: "true",
     orderBy: "startTime",
     timeMin: new Date().toISOString(),
-    maxResults: "50",
+    maxResults: "250",
   });
   const response = await calendarFetch(`/events?${params}`);
   if (!response.ok) {
     throw new CalendarUnavailable("The calendar could not be reached.");
   }
   const body = (await response.json()) as { items?: CalendarEvent[] };
-  return (body.items ?? [])
-    .filter(isOpen)
-    .map(slotFrom)
-    .filter((slot): slot is OpenSlot => slot !== null);
+  return body.items ?? [];
+}
+
+function span(event: CalendarEvent) {
+  const start = event.start?.dateTime;
+  const end = event.end?.dateTime;
+  if (!start || !end) return null;
+  const startMs = new Date(start).getTime();
+  const endMs = new Date(end).getTime();
+  if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs) {
+    return null;
+  }
+  return { startMs, endMs };
+}
+
+function overlaps(startMs: number, endMs: number, other: { startMs: number; endMs: number }) {
+  return startMs < other.endMs && other.startMs < endMs;
+}
+
+export async function listAppointmentSlots(minutes: number): Promise<OpenSlot[]> {
+  const duration = Math.min(Math.max(minutes, 15), 240) * 60 * 1000;
+  const events = await listUpcomingEvents();
+  const windows = events.filter(isOpen).flatMap((event) => {
+    const range = span(event);
+    return range && event.id ? [{ id: event.id, ...range }] : [];
+  });
+  const busy = events.filter((event) => !isOpen(event)).flatMap((event) => {
+    const range = span(event);
+    return range ? [range] : [];
+  });
+  const slots: OpenSlot[] = [];
+  for (const window of windows) {
+    for (let startMs = window.startMs; startMs + duration <= window.endMs; startMs += STEP_MS) {
+      const endMs = startMs + duration;
+      if (busy.some((item) => overlaps(startMs, endMs, item))) continue;
+      const start = new Date(startMs).toISOString();
+      slots.push({
+        id: `${window.id}|${start}`,
+        start,
+        end: new Date(endMs).toISOString(),
+      });
+    }
+  }
+  return slots;
 }
 
 export async function bookSlot(input: {
   eventId: string;
+  start: string;
+  minutes: number;
   name: string;
   email: string;
   reading: string;
   notes?: string;
   births?: string[];
 }) {
-  const current = await calendarFetch(
-    `/events/${encodeURIComponent(input.eventId)}`,
-  );
-  if (current.status === 404) {
+  const startMs = new Date(input.start).getTime();
+  const endMs = startMs + input.minutes * 60 * 1000;
+  if (!Number.isFinite(startMs) || endMs <= Date.now()) {
     throw new CalendarUnavailable("That time has just been taken.");
   }
-  if (!current.ok) {
-    throw new CalendarUnavailable("The calendar could not be reached.");
+  const events = await listUpcomingEvents();
+  const window = events.find((event) => event.id === input.eventId);
+  const windowSpan = window ? span(window) : null;
+  if (!window || !isOpen(window) || !windowSpan) {
+    throw new CalendarUnavailable("That time has just been taken.");
   }
-  const event = (await current.json()) as CalendarEvent;
-  if (!isOpen(event)) {
+  if (startMs < windowSpan.startMs || endMs > windowSpan.endMs) {
+    throw new CalendarUnavailable("That time has just been taken.");
+  }
+  const busy = events.filter((event) => !isOpen(event)).flatMap((event) => {
+    const range = span(event);
+    return range ? [range] : [];
+  });
+  if (busy.some((item) => overlaps(startMs, endMs, item))) {
     throw new CalendarUnavailable("That time has just been taken.");
   }
 
@@ -189,31 +233,24 @@ export async function bookSlot(input: {
     `Reading: ${input.reading}`,
     ...(input.births ?? []),
     input.notes?.trim() ? `Notes: ${input.notes.trim()}` : "",
+    "This is a request. Leave the event to accept it, or delete it to decline.",
   ]
     .filter(Boolean)
     .join("\n");
 
-  const updated = await calendarFetch(
-    `/events/${encodeURIComponent(input.eventId)}`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        ...(event.etag ? { "If-Match": event.etag } : {}),
-      },
-      body: JSON.stringify({
-        summary: `${input.reading} — ${input.name}`,
-        description,
-        extendedProperties: {
-          private: { atelierBooked: "true" },
-        },
-      }),
-    },
-  );
-  if (updated.status === 412) {
-    throw new CalendarUnavailable("That time has just been taken.");
-  }
-  if (!updated.ok) {
+  const created = await calendarFetch("/events", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      summary: `Request: ${input.reading} — ${input.name}`,
+      description,
+      status: "tentative",
+      start: { dateTime: new Date(startMs).toISOString() },
+      end: { dateTime: new Date(endMs).toISOString() },
+      extendedProperties: { private: { atelierBooked: "true" } },
+    }),
+  });
+  if (!created.ok) {
     throw new CalendarUnavailable("The calendar could not be updated.");
   }
   return { emailed: false };

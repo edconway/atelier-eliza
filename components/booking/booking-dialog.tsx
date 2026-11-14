@@ -19,7 +19,8 @@ import type { NatalChart, Place, SessionType } from "@/lib/types";
 
 const types = sittings.map((sitting) => ({
   value: sitting.value,
-  label: sitting.title,
+  label: `${sitting.title} (${sitting.time})`,
+  minutes: sitting.minutes,
 }));
 
 type Slot = { id: string; start: string; end: string };
@@ -287,10 +288,13 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
   const [otherBirth, setOtherBirth] = useState<BirthDraft>(() => emptyBirth());
   const [pending, setPending] = useState(false);
   const [booked, setBooked] = useState<string | null>(null);
+  const [emailed, setEmailed] = useState(false);
 
   useEffect(() => {
+    const minutes = types.find((type) => type.value === sessionType)?.minutes ?? 60;
     let cancelled = false;
-    fetch("/api/bookings")
+    setLoading(true);
+    fetch(`/api/bookings?minutes=${minutes}`)
       .then(async (response) => {
         const body = (await response.json()) as {
           slots?: Slot[];
@@ -298,8 +302,9 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
         };
         if (cancelled) return;
         setUnavailable(!response.ok || Boolean(body.unavailable));
-        setSlots(body.slots ?? []);
-        setEventId(body.slots?.[0]?.id ?? "");
+        const next = body.slots ?? [];
+        setSlots(next);
+        setEventId(next[0]?.id ?? "");
       })
       .catch(() => {
         if (!cancelled) setUnavailable(true);
@@ -310,7 +315,7 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [sessionType]);
 
   useEffect(() => {
     const first = charts[0];
@@ -338,7 +343,8 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          eventId,
+          eventId: eventId.split("|")[0],
+          start: eventId.split("|")[1],
           name,
           email,
           sessionType,
@@ -347,7 +353,7 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
           otherBirth: other,
         }),
       });
-      const body = (await response.json()) as { error?: string };
+      const body = (await response.json()) as { error?: string; emailed?: boolean };
       if (!response.ok) {
         toast.error(body.error ?? "That time could not be booked.");
         if (response.status === 409) {
@@ -358,16 +364,13 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
       }
       const chosen = slots.find((slot) => slot.id === eventId);
       setBooked(chosen ? formatSlot(chosen) : "that time");
-      toast.success("Booked.");
+      setEmailed(Boolean(body.emailed));
+      toast.success("Request sent.");
     } catch {
       toast.error("That time could not be booked.");
     } finally {
       setPending(false);
     }
-  }
-
-  if (loading) {
-    return <p className="text-sm text-muted-foreground">Looking for open times…</p>;
   }
 
   if (unavailable) {
@@ -379,39 +382,18 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
   if (booked) {
     return (
       <div className="space-y-3">
-        <h2 className="font-heading text-2xl">You’re booked</h2>
+        <h2 className="font-heading text-2xl">Request sent</h2>
         <p className="text-sm text-muted-foreground">
-          {booked} is held for you. Eliza has it on her calendar.
+          {booked} is on Eliza’s calendar as a request. She can keep it or delete it.
+          {emailed ? " A confirmation email is on its way." : ""}
         </p>
         {onDone ? <Button onClick={onDone}>Close</Button> : null}
       </div>
     );
   }
 
-  if (slots.length === 0) {
-    return (
-      <p className="text-sm text-muted-foreground">No open times right now.</p>
-    );
-  }
-
   return (
     <form onSubmit={onSubmit} className="space-y-4">
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium">Open times</legend>
-        {slots.map((slot) => (
-          <label key={slot.id} className="flex items-center gap-2 text-sm">
-            <input
-              type="radio"
-              name="slot"
-              value={slot.id}
-              checked={eventId === slot.id}
-              onChange={() => setEventId(slot.id)}
-              required
-            />
-            {formatSlot(slot)}
-          </label>
-        ))}
-      </fieldset>
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="bk-name">Name</Label>
@@ -449,6 +431,30 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
           ))}
         </select>
       </div>
+      <fieldset className="space-y-2">
+        <legend className="text-sm font-medium">Times that fit this reading</legend>
+        {loading ? (
+          <p className="text-sm text-muted-foreground">Looking for open times…</p>
+        ) : slots.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No opening long enough for this reading.
+          </p>
+        ) : (
+          slots.map((slot) => (
+            <label key={slot.id} className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="slot"
+                value={slot.id}
+                checked={eventId === slot.id}
+                onChange={() => setEventId(slot.id)}
+                required
+              />
+              {formatSlot(slot)}
+            </label>
+          ))
+        )}
+      </fieldset>
       <BirthFields
         idPrefix="bk-birth"
         label="Birth details"
@@ -476,7 +482,7 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
         />
       </div>
       <Button type="submit" className="w-full" disabled={pending || !eventId}>
-        {pending ? "Booking…" : "Book"}
+        {pending ? "Sending…" : "Request this time"}
       </Button>
     </form>
   );
@@ -490,7 +496,9 @@ export function BookingDialog() {
       <DialogContent className="max-h-[min(40rem,90vh)] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="font-heading text-2xl">Book</DialogTitle>
-          <DialogDescription>Choose an open time.</DialogDescription>
+          <DialogDescription>
+            Choose a time that fits the reading. Eliza can accept or decline it.
+          </DialogDescription>
         </DialogHeader>
         <BookingForm onDone={() => setBookingOpen(false)} />
       </DialogContent>
