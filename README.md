@@ -64,11 +64,13 @@ Until then, membership, charts, and newsletter signups persist in the browser (`
 
 Eliza creates one timed event per opening, titled `Open`. The site offers start times inside that opening, every 30 minutes, for the length of the reading. A request adds a separate tentative event and leaves the rest of the opening free. Eliza accepts by leaving that event, or declines by deleting it.
 
-Confirmation email is sent only when these are also set:
+Confirmation email is sent from a Gmail account when these are set:
 
-- `RESEND_API_KEY`
-- `BOOKING_FROM_EMAIL` — a sender Resend has verified
-- `BOOKING_NOTIFY_EMAIL` — optional address that receives a copy of each request
+- `GMAIL_USER` — the Gmail address that sends
+- `GMAIL_APP_PASSWORD` — a Google app password for that account, not the normal password
+- `BOOKING_NOTIFY_EMAIL` — Eliza’s address, so she gets her own copy of each request
+
+A Resend account can be used instead, with `RESEND_API_KEY` and `BOOKING_FROM_EMAIL`.
 
 ## Stack
 
