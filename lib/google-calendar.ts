@@ -23,6 +23,7 @@ type CalendarEvent = {
   start?: { dateTime?: string; date?: string; timeZone?: string };
   end?: { dateTime?: string; date?: string; timeZone?: string };
   attendees?: { email?: string; responseStatus?: string }[];
+  extendedProperties?: { private?: Record<string, string> };
 };
 
 export type OpenSlot = {
@@ -112,6 +113,7 @@ async function accessToken() {
 }
 
 function isOpen(event: CalendarEvent) {
+  if (event.extendedProperties?.private?.atelierBooked === "true") return false;
   const summary = (event.summary ?? "").trim().toLowerCase();
   const attendees = (event.attendees ?? []).filter(
     (attendee) => attendee.responseStatus !== "declined" && attendee.email,
@@ -191,39 +193,28 @@ export async function bookSlot(input: {
     .filter(Boolean)
     .join("\n");
 
-  const attendees = [
-    ...(event.attendees ?? []).filter((attendee) => attendee.email),
-    { email: input.email },
-  ];
-
-  const patch = async (sendUpdates: boolean) =>
-    calendarFetch(
-      `/events/${encodeURIComponent(input.eventId)}${sendUpdates ? "?sendUpdates=all" : ""}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          ...(event.etag ? { "If-Match": event.etag } : {}),
-        },
-        body: JSON.stringify({
-          summary: `${input.reading} — ${input.name}`,
-          description,
-          attendees,
-        }),
+  const updated = await calendarFetch(
+    `/events/${encodeURIComponent(input.eventId)}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        ...(event.etag ? { "If-Match": event.etag } : {}),
       },
-    );
-
-  let updated = await patch(true);
-  let emailed = updated.ok;
-  if (!updated.ok && updated.status !== 412) {
-    updated = await patch(false);
-    emailed = false;
-  }
+      body: JSON.stringify({
+        summary: `${input.reading} — ${input.name}`,
+        description,
+        extendedProperties: {
+          private: { atelierBooked: "true" },
+        },
+      }),
+    },
+  );
   if (updated.status === 412) {
     throw new CalendarUnavailable("That time has just been taken.");
   }
   if (!updated.ok) {
     throw new CalendarUnavailable("The calendar could not be updated.");
   }
-  return { emailed };
+  return { emailed: false };
 }
