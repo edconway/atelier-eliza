@@ -134,7 +134,7 @@ export function ChartWizard() {
             Who is this chart for?
           </h1>
           <p className="text-muted-foreground">
-            You, or someone else. Saved charts stay in your library.
+            You, or someone else. Saved charts stay in your account.
           </p>
           <div className="space-y-2">
             <Label htmlFor="who">Their name</Label>

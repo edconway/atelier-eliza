@@ -11,7 +11,7 @@ export default function MembersPage() {
   if (!ready) {
     return (
       <div className="mx-auto max-w-5xl px-4 py-24 text-muted-foreground">
-        Opening the library…
+        Opening the account…
       </div>
     );
   }
@@ -19,9 +19,9 @@ export default function MembersPage() {
   if (!member) {
     return (
       <div className="mx-auto max-w-lg px-4 py-24 text-center">
-        <h1 className="font-heading text-4xl">This library is private</h1>
+        <h1 className="font-heading text-4xl">This account is private</h1>
         <p className="mt-3 text-muted-foreground">
-          Sign in to see saved charts, session films, and sitting requests.
+          Sign in to see saved charts, session films, and consultation requests.
         </p>
         <Button className="mt-6" asChild>
           <Link href="/sign-in">Sign in</Link>
@@ -53,7 +53,7 @@ export default function MembersPage() {
           className="rounded-2xl border bg-card p-6 hover:border-gold"
         >
           <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
-            Library
+            Account
           </p>
           <p className="mt-2 font-heading text-3xl">{charts.length}</p>
           <p className="text-sm text-muted-foreground">saved charts</p>
@@ -85,7 +85,7 @@ export default function MembersPage() {
           <Link href="/chart/new">Draw another chart</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/members/charts">Open the library</Link>
+          <Link href="/members/charts">Open the account</Link>
         </Button>
       </div>
     </div>

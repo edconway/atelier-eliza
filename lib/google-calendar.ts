@@ -136,7 +136,7 @@ async function calendarFetch(path: string, init?: RequestInit) {
   return response;
 }
 
-const STEP_MS = 30 * 60 * 1000;
+const STEP_MS = 90 * 60 * 1000;
 
 async function listUpcomingEvents() {
   const params = new URLSearchParams({

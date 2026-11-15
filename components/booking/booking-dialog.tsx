@@ -257,6 +257,15 @@ function BirthFields({
   );
 }
 
+function dayKey(slot: Slot) {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/London",
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  }).format(new Date(slot.start));
+}
+
 function formatSlot(slot: Slot) {
   const start = new Date(slot.start);
   const end = new Date(slot.end);
@@ -289,6 +298,7 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
   const [pending, setPending] = useState(false);
   const [booked, setBooked] = useState<string | null>(null);
   const [emailed, setEmailed] = useState(false);
+  const [day, setDay] = useState("");
 
   useEffect(() => {
     const minutes = types.find((type) => type.value === sessionType)?.minutes ?? 60;
@@ -304,7 +314,8 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
         setUnavailable(!response.ok || Boolean(body.unavailable));
         const next = body.slots ?? [];
         setSlots(next);
-        setEventId(next[0]?.id ?? "");
+        setEventId("");
+        setDay("");
       })
       .catch(() => {
         if (!cancelled) setUnavailable(true);
@@ -431,8 +442,8 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
           ))}
         </select>
       </div>
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium">Times that fit this reading</legend>
+      <fieldset className="space-y-3">
+        <legend className="text-sm font-medium">Days with availability</legend>
         {loading ? (
           <p className="text-sm text-muted-foreground">Looking for open times…</p>
         ) : slots.length === 0 ? (
@@ -440,19 +451,48 @@ export function BookingForm({ onDone }: { onDone?: () => void }) {
             No opening long enough for this reading.
           </p>
         ) : (
-          slots.map((slot) => (
-            <label key={slot.id} className="flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                name="slot"
-                value={slot.id}
-                checked={eventId === slot.id}
-                onChange={() => setEventId(slot.id)}
-                required
-              />
-              {formatSlot(slot)}
-            </label>
-          ))
+          <>
+            <div className="flex flex-wrap gap-2">
+              {[...new Set(slots.map(dayKey))].map((label) => (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => {
+                    setDay(label);
+                    setEventId("");
+                  }}
+                  className={`rounded-full border px-3 py-1.5 text-sm ${
+                    day === label
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {day ? (
+              <div className="space-y-2">
+                {slots
+                  .filter((slot) => dayKey(slot) === day)
+                  .map((slot) => (
+                    <label key={slot.id} className="flex items-center gap-2 text-sm">
+                      <input
+                        type="radio"
+                        name="slot"
+                        value={slot.id}
+                        checked={eventId === slot.id}
+                        onChange={() => setEventId(slot.id)}
+                        required
+                      />
+                      {formatSlot(slot)}
+                    </label>
+                  ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Choose a day to see start times.</p>
+            )}
+          </>
         )}
       </fieldset>
       <BirthFields

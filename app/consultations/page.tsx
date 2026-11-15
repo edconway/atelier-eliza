@@ -4,7 +4,7 @@ import { sittings } from "@/lib/sittings";
 import { SittingCard } from "@/components/booking/sitting-card";
 
 export const metadata: Metadata = {
-  title: "Sittings",
+  title: "Consultations",
 };
 
 export default function ConsultationsPage() {
@@ -13,7 +13,7 @@ export default function ConsultationsPage() {
       <p className="text-xs uppercase tracking-[0.28em] text-rose">
         Readings you can book
       </p>
-      <h1 className="mt-4 font-heading text-5xl tracking-tight">Sittings</h1>
+      <h1 className="mt-4 font-heading text-5xl tracking-tight">Consultations</h1>
       <div className="mt-12 grid gap-5 lg:grid-cols-3">
         {sittings.map((sitting) => (
           <SittingCard key={sitting.value} sitting={sitting} />

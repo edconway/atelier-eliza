@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAtelier } from "@/lib/atelier-store";
 import { cn } from "@/lib/utils";
+import { BalsamicMoon } from "@/components/site/balsamic-moon";
 
 const links = [
   { href: "/about", label: "Eliza" },
   { href: "/chart/new", label: "Draw a chart" },
-  { href: "/journal", label: "Journal" },
-  { href: "/members", label: "Library" },
+  { href: "/members", label: "Account" },
 ];
 
 export function SiteHeader() {
@@ -25,8 +25,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="font-heading text-[1.35rem] tracking-tight">
-          <span className="mr-1.5 text-rose">☽</span>
-          Eliza
+          <BalsamicMoon className="mr-1.5 inline-block size-5 align-[-3px] text-rose" />
+          Eliza Pelham
         </Link>
         <nav className="hidden items-center gap-7 text-sm md:flex">
           {links.map((link) => (

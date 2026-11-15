@@ -111,7 +111,7 @@ export function AafInterchange() {
       <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
         Astro.com does not offer an API. Paste an AAF export from My Astro
         (the aaf button appears if you have more than ten saved charts) to add
-        those charts here. You can also export this library as AAF.
+        those charts here. You can also export this account as AAF.
       </p>
       <Textarea
         className="mt-5 min-h-32 font-mono text-xs"
@@ -128,7 +128,7 @@ export function AafInterchange() {
           {pending ? "Drawing…" : "Import AAF"}
         </Button>
         <Button variant="outline" className="rounded-full" onClick={exportAaf}>
-          Export my library
+          Export my account
         </Button>
         <Button variant="ghost" className="rounded-full" asChild>
           <a href="https://www.astro.com/cgi/h.cgi" target="_blank" rel="noreferrer">

@@ -23,17 +23,14 @@ export function SiteFooter() {
             <Link href="/book" className="hover:text-rose">
               Book
             </Link>
-            <Link href="/journal" className="hover:text-rose">
-              Journal
-            </Link>
             <Link href="/chart/new" className="hover:text-rose">
               Draw a chart
             </Link>
             <Link href="/members" className="hover:text-rose">
-              Library
+              Account
             </Link>
           </div>
-          <p>Natal charts for children.</p>
+          <p>astrology</p>
         </div>
       </div>
     </footer>

@@ -128,7 +128,7 @@ export function ChartView({ chart }: { chart: NatalChart }) {
           </Button>
           <Button variant="outline" className="rounded-full" asChild>
             <Link href="/members">
-              {member ? "Open your library" : "Save in your library"}
+              {member ? "Open your account" : "Save in your account"}
             </Link>
           </Button>
           <ViewOnAstroCom chart={chart} />

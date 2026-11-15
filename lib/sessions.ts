@@ -3,7 +3,7 @@ import type { SessionFilm } from "./types";
 export const sessionFilms: SessionFilm[] = [
   {
     id: "sitting-2026-01-18",
-    title: "Natal sitting — first hour",
+    title: "Natal consultation — first hour",
     date: "18 January 2026",
     duration: "58 min",
     synopsis: "Sample recording of a natal session.",

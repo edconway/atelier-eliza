@@ -38,7 +38,7 @@ export const sessionLabels: Record<SessionType, string> = {
   child: "One child, one hour",
   "child-with-other": "One child, with one other person",
   adult: "Your own hero’s journey",
-  natal: "Natal sitting",
+  natal: "Natal consultation",
   "follow-up": "Follow-up",
   family: "Family / child’s chart",
   "year-ahead": "Year ahead",

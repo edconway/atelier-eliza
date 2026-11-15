@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { sittings } from "@/lib/sittings";
 import { SittingCard } from "@/components/booking/sitting-card";
 import { BookingForm } from "@/components/booking/booking-dialog";
+import { PaymentNote } from "@/components/site/payment-note";
 
 export const metadata: Metadata = {
   title: "Book a reading",
@@ -20,6 +21,9 @@ export default function BookPage() {
         {sittings.map((sitting) => (
           <SittingCard key={sitting.value} sitting={sitting} />
         ))}
+      </div>
+      <div className="mt-10">
+        <PaymentNote />
       </div>
       <div className="mx-auto mt-16 max-w-lg rounded-3xl border bg-card p-6 sm:p-8">
         <h2 className="font-heading text-3xl">Choose a time</h2>

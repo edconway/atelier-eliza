@@ -25,7 +25,7 @@ export default function SignInPage() {
       <p className="text-xs uppercase tracking-[0.28em] text-gold-ink">
         Members
       </p>
-      <h1 className="mt-4 font-heading text-4xl">Your library</h1>
+      <h1 className="mt-4 font-heading text-4xl">Your account</h1>
       <p className="mt-3 text-sm text-muted-foreground">
         Charts and recordings are stored in this browser for now. A name and
         email label them as yours.
@@ -51,7 +51,7 @@ export default function SignInPage() {
           />
         </div>
         <Button type="submit" className="w-full">
-          Enter the library
+          Enter the account
         </Button>
       </form>
       <button

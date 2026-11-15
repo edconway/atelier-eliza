@@ -14,7 +14,7 @@ export default function MembersSessionsPage() {
   if (!member) {
     return (
       <div className="mx-auto max-w-lg px-4 py-24 text-center">
-        <p className="text-muted-foreground">Sign in to watch your sittings.</p>
+        <p className="text-muted-foreground">Sign in to watch your consultations.</p>
         <Button className="mt-4" asChild>
           <Link href="/sign-in">Sign in</Link>
         </Button>
@@ -28,7 +28,7 @@ export default function MembersSessionsPage() {
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
       <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
         <Link href="/members" className="hover:text-gold-ink">
-          Library
+          Account
         </Link>{" "}
         · Films
       </p>

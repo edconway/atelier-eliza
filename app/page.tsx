@@ -2,6 +2,7 @@ import Link from "next/link";
 import { currentSky, moonViewSky } from "@/lib/sky";
 import { Button } from "@/components/ui/button";
 import { MoonVeil } from "@/components/site/moon-veil";
+import { ReadingBlocks } from "@/components/site/reading-blocks";
 
 export const dynamic = "force-dynamic";
 
@@ -22,11 +23,16 @@ const BAND_STARS = [
   [58, 8],
 ];
 
-const quotes = [
-  [
+const quotes: { name: string; paragraphs: string[] }[] = [
+  {
+    name: "Hely",
+    paragraphs: [
     "I have worked with Eliza for both my sons & what she has shared has been so deeply insightful & transformational in how I best support them as our relationships evolve & spiral through our family web. I highly recommend her to any parents who are curious how to thrive within our imprints, interactions & all their many energetic threads & possibilities; & have personally experienced really significant shifts in my capacity to hold & respond to certain situations & dynamics. We’re so grateful, thank you Eliza.",
   ],
-  [
+  },
+  {
+    name: "Tatyana",
+    paragraphs: [
     "A week before my astrology reading with Eliza, I I told myself I felt the call to specifically have a tropical astrogeology reading and low and behold without any effort Eliza came through as though the energies heard and connected us seamlessly.",
     "Eliza's knowledge blew my mind and heart wide open.",
     "Her tactfulness, her grace and empathy in delivering the information felt like a warm hug.",
@@ -38,10 +44,14 @@ const quotes = [
     "Astrology is the map and Eliza is the guide on the best routes to take. We individually decide the steps we take.",
     "Thank you Eliza from the very bottom of my soul 🙏🏽",
   ],
-  [
+  },
+  {
+    name: "Natalya",
+    paragraphs: [
     "The insights I gained from Eliza’s session gave me a perspective into my daughter’s world I hadn’t yet considered, and consequently had an immediate positive effect on my ability to parent with compassionate understanding.",
     "It was invaluable and I highly recommend her!",
   ],
+  },
 ];
 
 const readings = [
@@ -99,7 +109,7 @@ export default function HomePage() {
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1.15fr_0.85fr]">
           <div>
             <h1 className="max-w-3xl font-heading text-5xl leading-[1.05] sm:text-6xl">
-              Natal charts for Children
+              astrology
             </h1>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" className="rounded-full px-6">
@@ -143,38 +153,30 @@ export default function HomePage() {
       </section>
 
       <section className="border-y bg-card/70">
-        <div className="mx-auto max-w-3xl space-y-12 px-4 py-16 sm:px-6">
-          {readings.map((reading) => (
-            <div key={reading.title} className="space-y-6">
-              <h2 className="font-heading text-4xl">{reading.title}</h2>
-              <div className="space-y-6 text-base leading-[1.75] text-foreground/85 sm:text-lg">
-                {reading.paragraphs.map((paragraph) => (
-                  <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-                ))}
-              </div>
-              <div>
-                <Button asChild className="rounded-full px-6">
-                  <Link href="/book">Book</Link>
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
+        <ReadingBlocks readings={readings} />
+      </section>
+
+      <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+        <h2 className="font-heading text-4xl">About me</h2>
+        <p className="mt-6 text-base leading-[1.75] text-foreground/85 sm:text-lg">
+          I arrived here after a long journey with astrology, feeling the pull of the stars for years, feeling the mood change with the moon, feeling the transits, but never really able to reconcile myself with my natal chart. I studied and had readings for years, fascinated, but always a little disappointed. Never feeling like the interpretations reached me.  When my four children were born, it was kind the same.  My prayer is that it won’t be like this for you. Because while I was clearly in denial, I do feel that personality descriptions and assumptions based on astrology are so limiting. What lights me up is tuning into deeper undercurrents, desires, and orientations.  Where can we be nourished, what do we really love, and why is this all so much bigger than us?  Our consultation will be collaborative - I will point things out and the interpretations will emerge from you, and afterwards, the door will always be open for your stars to continue whispering to you..
+        </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <h2 className="font-heading text-4xl">From parents</h2>
+        <h2 className="font-heading text-4xl">Testimonials</h2>
         <div className="mt-8 grid gap-6">
-          {quotes.map((paragraphs) => (
+          {quotes.map((quote) => (
             <figure
-              key={paragraphs[0]}
+              key={quote.name}
               className="rounded-3xl border bg-card p-6"
             >
               <blockquote className="space-y-4 text-base leading-[1.75] text-foreground/85">
-                {paragraphs.map((paragraph) => (
+                {quote.paragraphs.map((paragraph) => (
                   <p key={paragraph.slice(0, 48)}>{paragraph}</p>
                 ))}
               </blockquote>
+              <figcaption className="mt-4 text-sm font-medium">{quote.name}</figcaption>
             </figure>
           ))}
         </div>

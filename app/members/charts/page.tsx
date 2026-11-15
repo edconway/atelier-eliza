@@ -69,7 +69,7 @@ export default function MembersChartsPage() {
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
       <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
         <Link href="/members" className="hover:text-gold-ink">
-          Library
+          Account
         </Link>{" "}
         · Charts
       </p>
